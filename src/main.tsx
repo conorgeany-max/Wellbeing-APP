@@ -1,8 +1,8 @@
+/// <reference types="vite-plugin-pwa/client" />
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
-/// <reference types="vite-plugin-pwa/client" />
 import { registerSW } from 'virtual:pwa-register';
 
 // Reload once a new version's service worker takes over, so a deploy shows up
