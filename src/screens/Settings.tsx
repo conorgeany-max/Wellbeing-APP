@@ -115,7 +115,7 @@ export default function Settings() {
               const st = strengths.find((x) => x.id === id);
               if (!st) return null;
               return (
-                <li key={id} className={`flex items-center gap-2 rounded-xl px-3 py-1.5 ${i < 5 ? 'bg-sage/10' : ''}`}>
+                <li key={id} className={`flex items-center gap-2 rounded-xl px-3 py-1.5 ${i < 5 ? 'bg-accent/10' : ''}`}>
                   <span className="w-6 text-right text-sm text-muted">{i + 1}</span>
                   <span className="flex-1 text-sm">{st.name}</span>
                   <button className="btn-ghost px-2 py-1" onClick={() => move(i, -1)} disabled={i === 0} aria-label={`Move ${st.name} up`}>↑</button>
@@ -169,7 +169,7 @@ function Row({ label, hint, children }: { label: string; hint?: string; children
 
 function Toggle({ on, onChange }: { on: boolean; onChange: (v: boolean) => void }) {
   return (
-    <button role="switch" aria-checked={on} onClick={() => onChange(!on)} className={`relative h-7 w-12 rounded-full transition ${on ? 'bg-sage' : 'bg-line'}`}>
+    <button role="switch" aria-checked={on} onClick={() => onChange(!on)} className={`relative h-7 w-12 rounded-full transition ${on ? 'bg-accent' : 'bg-line'}`}>
       <span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all ${on ? 'left-6' : 'left-1'}`} />
     </button>
   );

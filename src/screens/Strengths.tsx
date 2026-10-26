@@ -37,7 +37,7 @@ export default function Strengths() {
 
   return (
     <Page eyebrow="VIA Character Strengths" title="Your strengths">
-      <Card sand className="mb-8">
+      <Card tint className="mb-8">
         <Eyebrow>Strength of the week</Eyebrow>
         {focus ? (
           <>
@@ -63,11 +63,11 @@ export default function Strengths() {
             <Card key={s.id} className="flex flex-col">
               <div className="flex items-baseline justify-between">
                 <Eyebrow>#{s.rank} · {s.virtue}</Eyebrow>
-                <span className="text-sage" aria-hidden>✦</span>
+                <span className="text-accent" aria-hidden>✦</span>
               </div>
               <h3 className="headline mt-1 text-xl">{s.name}</h3>
               <p className="mt-1 text-sm text-muted">{s.description}</p>
-              <p className="mt-3 rounded-xl bg-sand px-3 py-2 text-sm"><span className="eyebrow mr-1">Use it today</span> {s.useIdea}</p>
+              <p className="mt-3 rounded-xl bg-tint px-3 py-2 text-sm"><span className="eyebrow mr-1">Use it today</span> {s.useIdea}</p>
               <div className="mt-4 grid grid-cols-2 gap-3 border-t border-line pt-3 text-sm">
                 <div><p className="headline text-xl">{st?.count30 ?? 0}</p><p className="text-xs text-muted">days used, last 30</p></div>
                 <div>

@@ -5,20 +5,33 @@ export function Eyebrow({ children, className = '' }: { children: ReactNode; cla
   return <p className={`eyebrow ${className}`}>{children}</p>;
 }
 
-/** Standard screen wrapper: eyebrow + serif title + content, with a gentle fade in. */
+/**
+ * Big studio-style headline: the first word in heavy condensed caps, the rest in serif caps.
+ * Non-string titles render as given.
+ */
+export function MixedTitle({ children, className = '' }: { children: ReactNode; className?: string }) {
+  if (typeof children !== 'string') return <h1 className={`display ${className}`}>{children}</h1>;
+  const [first, ...rest] = children.split(' ');
+  return (
+    <h1 className={`uppercase leading-[0.9] ${className}`}>
+      <span className="display">{first}</span>
+      {rest.length > 0 && <span className="headline"> {rest.join(' ')}</span>}
+    </h1>
+  );
+}
+
+/** Standard screen wrapper: serif lead line + mixed headline + content, rising in gently. */
 export function Page({ eyebrow, title, action, children }: { eyebrow: string; title: ReactNode; action?: ReactNode; children: ReactNode }) {
   return (
     <motion.main
-      initial={{ opacity: 0, y: 8 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, ease: 'easeOut' }}
-      className="mx-auto w-full max-w-2xl px-4 pb-28 pt-8 sm:px-6 md:pb-12"
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      className="mx-auto w-full max-w-2xl px-4 pb-28 pt-10 sm:px-6 md:pb-16 md:pt-8"
     >
-      <header className="mb-6 flex items-end justify-between gap-4">
-        <div>
-          <Eyebrow>{eyebrow}</Eyebrow>
-          <h1 className="headline mt-1 text-3xl sm:text-4xl">{title}</h1>
-        </div>
+      <header className="mb-10 flex flex-col items-center gap-4 text-center">
+        <p className="lead">{eyebrow}</p>
+        <MixedTitle className="text-[2.75rem] sm:text-6xl">{title}</MixedTitle>
         {action}
       </header>
       {children}
@@ -26,15 +39,15 @@ export function Page({ eyebrow, title, action, children }: { eyebrow: string; ti
   );
 }
 
-export function Card({ children, className = '', sand = false }: { children: ReactNode; className?: string; sand?: boolean }) {
-  return <section className={`${sand ? 'card-sand' : 'card'} p-5 ${className}`}>{children}</section>;
+export function Card({ children, className = '', tint = false }: { children: ReactNode; className?: string; tint?: boolean }) {
+  return <section className={`${tint ? 'card-tint' : 'card'} p-5 ${className}`}>{children}</section>;
 }
 
 export function SectionTitle({ eyebrow, title, hint }: { eyebrow?: string; title: string; hint?: string }) {
   return (
     <div className="mb-3">
       {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
-      <h2 className="headline text-xl">{title}</h2>
+      <h2 className="headline text-2xl sm:text-3xl">{title}</h2>
       {hint && <p className="mt-0.5 text-sm text-muted">{hint}</p>}
     </div>
   );
@@ -49,13 +62,13 @@ export function Chip({ on, onClick, children, title }: { on?: boolean; onClick?:
 }
 
 export function Empty({ children }: { children: ReactNode }) {
-  return <p className="rounded-card border border-dashed border-line p-6 text-center text-sm text-muted">{children}</p>;
+  return <p className="rounded-card border-2 border-dashed border-line p-6 text-center text-sm text-muted">{children}</p>;
 }
 
 export function Modal({ open, onClose, children, title }: { open: boolean; onClose: () => void; children: ReactNode; title: string }) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/30 p-0 backdrop-blur-sm sm:items-center sm:p-6" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 backdrop-blur-sm sm:items-center sm:p-6" onClick={onClose}>
       <motion.div
         role="dialog"
         aria-label={title}
@@ -65,7 +78,7 @@ export function Modal({ open, onClose, children, title }: { open: boolean; onClo
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="headline text-2xl">{title}</h2>
+          <h2 className="headline text-3xl">{title}</h2>
           <button onClick={onClose} className="btn-ghost px-3 py-2" aria-label="Close">✕</button>
         </div>
         {children}
@@ -78,7 +91,7 @@ export function Stat({ label, value, sub }: { label: string; value: ReactNode; s
   return (
     <div>
       <Eyebrow>{label}</Eyebrow>
-      <p className="headline mt-1 text-2xl">{value}</p>
+      <p className="headline mt-1 text-4xl">{value}</p>
       {sub && <p className="text-xs text-muted">{sub}</p>}
     </div>
   );

@@ -2,7 +2,7 @@ import type { ISODate } from '../db/types';
 import { addDays, formatShort, today, weekStart } from '../lib/date';
 
 /** GitHub-style calendar of the last N weeks; columns are weeks, rows Mon-Sun. */
-export function Heatmap({ done, weeks = 12, color = 'rgb(var(--sage))' }: { done: Set<ISODate>; weeks?: number; color?: string }) {
+export function Heatmap({ done, weeks = 12, color = 'rgb(var(--accent))' }: { done: Set<ISODate>; weeks?: number; color?: string }) {
   const end = today();
   const start = addDays(weekStart(end), -(weeks - 1) * 7);
   const cols = Array.from({ length: weeks }, (_, w) => Array.from({ length: 7 }, (_, d) => addDays(start, w * 7 + d)));

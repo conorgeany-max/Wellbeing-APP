@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 // Chart colours validated for colour-blind separation and contrast on each
 // surface (dataviz palette checks). SVG attributes can't read CSS variables,
 // so charts pick the set for the active theme.
-const LIGHT = { mood: '#3E8E5E', energy: '#8466CC', grid: '#E2DCD1', axis: '#687274', surface: '#FFFFFF' };
-const DARK = { mood: '#4FA06F', energy: '#9579DC', grid: '#2D3944', axis: '#96A0A6', surface: '#1B242D' };
+const LIGHT = { mood: '#3300FF', energy: '#E8661A', grid: '#DEDEE2', axis: '#626268', surface: '#FFFFFF' };
+const DARK = { mood: '#8474FF', energy: '#F08A3E', grid: '#32323A', axis: '#A0A0A8', surface: '#1A1A1E' };
 
 export function useChartTheme() {
   const [dark, setDark] = useState(() => document.documentElement.classList.contains('dark'));

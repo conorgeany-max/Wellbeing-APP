@@ -81,11 +81,11 @@ export default function CheckIn() {
     return (
       <Shell onClose={() => navigate('/')}>
         <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-1 flex-col justify-center gap-6 text-center">
-          <p className="headline text-6xl text-sage">✓</p>
+          <p className="headline text-6xl text-accent">✓</p>
           <h1 className="headline text-3xl">Thank you for checking in.</h1>
           <p className="text-muted">That's three quiet minutes for you. See you tomorrow, or whenever you're ready.</p>
           {mood <= 2 && low && (
-            <div className="card-sand mx-auto max-w-sm p-5 text-left">
+            <div className="card-tint mx-auto max-w-sm p-5 text-left">
               <Eyebrow>One small thing · {low.strength.name}</Eyebrow>
               <p className="mt-2">{low.action}</p>
               <p className="mt-2 text-sm text-muted">Low days happen. Be gentle with yourself.</p>
@@ -152,11 +152,11 @@ export default function CheckIn() {
                 <button
                   type="button"
                   onClick={() => setDone((d) => { const n = new Set(d); if (on) n.delete(h.id); else n.add(h.id); return n; })}
-                  className={`flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-left transition ${on ? 'border-sage bg-sage/15' : 'border-line hover:bg-sand'}`}
+                  className={`flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-left transition ${on ? 'border-accent bg-accent/15' : 'border-line hover:bg-tint'}`}
                 >
                   <span className="text-xl" aria-hidden>{h.icon}</span>
                   <span className="flex-1">{h.name}<span className="block text-xs text-muted">{frequencyLabel(h)}</span></span>
-                  <span className={`flex h-6 w-6 items-center justify-center rounded-full border ${on ? 'border-sage bg-sage text-white' : 'border-line'}`}>{on ? '✓' : ''}</span>
+                  <span className={`flex h-6 w-6 items-center justify-center rounded-full border ${on ? 'border-accent bg-accent text-white' : 'border-line'}`}>{on ? '✓' : ''}</span>
                 </button>
               </li>
             );
@@ -168,7 +168,7 @@ export default function CheckIn() {
     body = (
       <StepCard n={4} title="Reflect." helper="One good thing, and the strengths you used.">
         {quote && (
-          <blockquote className="card-sand mb-5 p-5">
+          <blockquote className="card-tint mb-5 p-5">
             <p className="headline text-lg leading-snug">“{quote.text}”</p>
             <footer className="mt-2 text-sm text-muted">{quote.author}</footer>
           </blockquote>
@@ -180,7 +180,7 @@ export default function CheckIn() {
           <div className="flex flex-wrap gap-2">
             {shownStrengths.map((s) => (
               <Chip key={s.id} on={used.includes(s.id)} onClick={() => setUsed(toggle(used, s.id, 3))} title={s.description}>
-                {s.rank <= 5 && <span className={used.includes(s.id) ? '' : 'text-sage'} aria-hidden>✦</span>}
+                {s.rank <= 5 && <span className={used.includes(s.id) ? '' : 'text-accent'} aria-hidden>✦</span>}
                 {s.name}
               </Chip>
             ))}
@@ -229,7 +229,7 @@ function Shell({ children, onClose, step }: { children: ReactNode; onClose: () =
       <div className="mb-4 flex items-center justify-between">
         <div className="flex gap-1.5" aria-label="Progress">
           {step !== undefined && STEPS.map((s, i) => (
-            <span key={s} className={`h-1.5 rounded-full transition-all ${i === step ? 'w-8 bg-sage' : i < step ? 'w-4 bg-sage/50' : 'w-4 bg-line'}`} />
+            <span key={s} className={`h-1.5 rounded-full transition-all ${i === step ? 'w-8 bg-accent' : i < step ? 'w-4 bg-accent/50' : 'w-4 bg-line'}`} />
           ))}
         </div>
         <button type="button" onClick={onClose} className="btn-ghost px-3 py-2 text-muted" aria-label="Close check-in">✕</button>
@@ -242,8 +242,8 @@ function Shell({ children, onClose, step }: { children: ReactNode; onClose: () =
 function StepCard({ n, title, helper, children }: { n: number; title: string; helper: string; children: ReactNode }) {
   return (
     <section className="card p-6 sm:p-8">
-      <p className="headline text-6xl leading-none text-sage/70">{String(n).padStart(2, '0')}</p>
-      <Eyebrow className="mt-3">{String(n).padStart(2, '0')} · {STEPS[n - 1]}</Eyebrow>
+      <p className="display text-7xl text-accent">{String(n).padStart(2, '0')}</p>
+      <Eyebrow className="mt-3">Step {n} of {STEPS.length} · {STEPS[n - 1]}</Eyebrow>
       <h1 className="headline mt-1 text-3xl">{title}</h1>
       <p className="mb-6 mt-1 text-muted">{helper}</p>
       {children}

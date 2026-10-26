@@ -12,10 +12,10 @@ export function SupportContent() {
         If things feel like too much, you don't have to handle it alone. These services are free, confidential and there to listen.
       </p>
       {info.lines.map((l) => (
-        <div key={l.name} className="card-sand p-4">
+        <div key={l.name} className="card-tint p-4">
           <p className="font-medium">{l.name}</p>
           {l.phone && (
-            <a className="headline mt-1 block text-2xl text-sage" href={`tel:${l.phone.replace(/\s/g, '')}`}>{l.phone}</a>
+            <a className="headline mt-1 block text-2xl text-accent" href={`tel:${l.phone.replace(/\s/g, '')}`}>{l.phone}</a>
           )}
           {l.text && <p className="text-muted">{l.text}</p>}
           <a className="link text-xs" href={l.url} target="_blank" rel="noreferrer">{l.url.replace('https://', '')}</a>

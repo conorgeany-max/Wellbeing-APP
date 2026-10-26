@@ -123,7 +123,7 @@ export function CloudSettings() {
             <p className="text-sm font-medium">Use Claude for “Ask my journal”</p>
             <p className="text-xs text-muted">Your question and recent entries are sent to Anthropic to answer it. Turn off to keep searches on this device.</p>
           </div>
-          <button role="switch" aria-checked={s.useClaude} onClick={() => setSetting('useClaude', !s.useClaude)} className={`relative h-7 w-12 rounded-full transition ${s.useClaude ? 'bg-sage' : 'bg-line'}`}>
+          <button role="switch" aria-checked={s.useClaude} onClick={() => setSetting('useClaude', !s.useClaude)} className={`relative h-7 w-12 rounded-full transition ${s.useClaude ? 'bg-accent' : 'bg-line'}`}>
             <span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all ${s.useClaude ? 'left-6' : 'left-1'}`} />
             <span className="sr-only">Use Claude</span>
           </button>
