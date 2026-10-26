@@ -14,6 +14,26 @@ const ago = (t: number | null) => {
   return new Date(t).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
 };
 
+/** Shown until ANTHROPIC_API_KEY is set on the server. Everything else works without it. */
+function ClaudeNotConnected() {
+  return (
+    <div className="space-y-2 py-3">
+      <div className="flex items-center gap-2">
+        <p className="text-sm font-medium">Claude</p>
+        <span className="rounded-full bg-line px-2 py-0.5 text-[11px] text-muted">Not connected yet</span>
+      </div>
+      <p className="text-xs text-muted">
+        When connected, Claude answers “Ask my journal” in plain language and can write your monthly reflection. Until then, Ask my journal uses keyword search on this device.
+      </p>
+      <ol className="list-decimal space-y-0.5 pl-5 text-xs text-muted">
+        <li>Create a key at <a className="link" href="https://console.anthropic.com/settings/keys" target="_blank" rel="noreferrer">console.anthropic.com</a>.</li>
+        <li>In Netlify, add it under Environment variables as <code>ANTHROPIC_API_KEY</code> (scope Functions, secret).</li>
+        <li>Trigger a new deploy, then come back here and turn Claude on.</li>
+      </ol>
+    </div>
+  );
+}
+
 /** Connect this device to the hosted app: sync, Claude and push reminders. */
 export function CloudSettings() {
   const s = useSettings();
@@ -97,20 +117,20 @@ export function CloudSettings() {
         </button>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 py-3">
-        <div className="min-w-0 max-w-sm">
-          <p className="text-sm font-medium">Use Claude for “Ask my journal”</p>
-          <p className="text-xs text-muted">
-            {status.ai
-              ? 'Your question and recent entries are sent to Anthropic to answer it. Turn off to keep searches on this device.'
-              : 'Add ANTHROPIC_API_KEY in Netlify to turn this on.'}
-          </p>
+      {status.ai ? (
+        <div className="flex flex-wrap items-center justify-between gap-3 py-3">
+          <div className="min-w-0 max-w-sm">
+            <p className="text-sm font-medium">Use Claude for “Ask my journal”</p>
+            <p className="text-xs text-muted">Your question and recent entries are sent to Anthropic to answer it. Turn off to keep searches on this device.</p>
+          </div>
+          <button role="switch" aria-checked={s.useClaude} onClick={() => setSetting('useClaude', !s.useClaude)} className={`relative h-7 w-12 rounded-full transition ${s.useClaude ? 'bg-accent' : 'bg-line'}`}>
+            <span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all ${s.useClaude ? 'left-6' : 'left-1'}`} />
+            <span className="sr-only">Use Claude</span>
+          </button>
         </div>
-        <button role="switch" aria-checked={s.useClaude} disabled={!status.ai} onClick={() => setSetting('useClaude', !s.useClaude)} className={`relative h-7 w-12 rounded-full transition disabled:opacity-40 ${s.useClaude ? 'bg-accent' : 'bg-line'}`}>
-          <span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all ${s.useClaude ? 'left-6' : 'left-1'}`} />
-          <span className="sr-only">Use Claude</span>
-        </button>
-      </div>
+      ) : (
+        <ClaudeNotConnected />
+      )}
 
       <div className="flex flex-wrap items-center justify-between gap-3 py-3">
         <div className="min-w-0 max-w-sm">
