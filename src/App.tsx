@@ -5,6 +5,7 @@ import { useSettings } from './db/settings';
 import { ensureSeeded } from './db/seed';
 import { useApplyTheme } from './lib/theme';
 import { useDailyReminder } from './lib/reminder';
+import { useAutoSync } from './lib/useAutoSync';
 import Today from './screens/Today';
 import CheckIn from './screens/CheckIn';
 import Journal from './screens/Journal';
@@ -17,6 +18,7 @@ import More from './screens/More';
 
 // Charts are the heaviest part of the bundle, so Insights loads on demand.
 const Insights = lazy(() => import('./screens/Insights'));
+const Report = lazy(() => import('./screens/Report'));
 
 function Shell() {
   const { pathname } = useLocation();
@@ -38,6 +40,8 @@ function Shell() {
             <Route path="/quotes" element={<Quotes />} />
             <Route path="/strengths" element={<Strengths />} />
             <Route path="/insights" element={<Insights />} />
+            <Route path="/report" element={<Report />} />
+            <Route path="/report/:month" element={<Report />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/more" element={<More />} />
           </Routes>
@@ -52,7 +56,8 @@ export default function App() {
   const settings = useSettings();
   const [ready, setReady] = useState(false);
   useApplyTheme(settings.theme);
-  useDailyReminder(settings.reminderTime);
+  useDailyReminder(settings.pushEnabled ? null : settings.reminderTime); // push takes over when enabled
+  useAutoSync(settings.accessCode);
   useEffect(() => {
     ensureSeeded().finally(() => setReady(true));
   }, []);

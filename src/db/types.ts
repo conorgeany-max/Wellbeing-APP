@@ -69,4 +69,13 @@ export interface Strength {
 export interface Setting {
   key: string;
   value: unknown;
+  updatedAt?: number; // set for settings that sync between devices
+}
+
+/** A record deleted on this device, kept so the deletion can sync. */
+export interface Tombstone {
+  key: string; // `${table}:${id}`
+  table: string;
+  id: string;
+  updatedAt: number;
 }

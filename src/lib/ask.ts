@@ -2,10 +2,10 @@ import type { Entry } from '../db/types';
 import { WEEKDAYS, formatShort, fromISO } from './date';
 import { MIN_SAMPLE, fmt1, mean, plural } from './stats';
 import { STOPWORDS } from './text';
+import { api } from './cloud';
 
-// "Ask my journal". The app ships with a local keyword provider. To answer in
-// natural language with an AI model, implement AskProvider (see README:
-// "Plugging in Claude") and pass it to askJournal.
+// "Ask my journal". Two providers: private on-device keyword search (always
+// available) and Claude via the hosted app's /api/ask function (opt-in).
 
 export interface AskResult {
   matches: Entry[];
@@ -87,30 +87,34 @@ export const localProvider: AskProvider = {
   },
 };
 
-/**
- * Example remote provider: POSTs the question and entries to your own backend,
- * which calls an AI model and returns { summary: string[], matchDates: string[] }.
- * Keep API keys on the server, never in the browser.
- */
-export function remoteProvider(endpoint: string): AskProvider {
-  return {
-    name: 'AI',
-    async ask(question, entries) {
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          question,
-          entries: entries.map(({ date, mood, energy, sleepHours, text, reflection, tags, strengthsUsed }) => ({ date, mood, energy, sleepHours, text, reflection, tags, strengthsUsed })),
-        }),
-      });
-      if (!res.ok) throw new Error(`Ask failed (${res.status})`);
-      const data = (await res.json()) as { summary: string[]; matchDates: string[] };
-      const dates = new Set(data.matchDates);
-      return { matches: entries.filter((e) => dates.has(e.date)), summary: data.summary, terms: [], source: 'ai' };
-    },
-  };
+/** Entries in the compact shape sent to Claude (most recent first, long text trimmed). */
+export function forClaude(entries: Entry[], limit = 240) {
+  return [...entries]
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .slice(0, limit)
+    .map(({ date, mood, energy, sleepHours, text, reflection, tags, strengthsUsed }) => ({
+      date, mood, energy, sleepHours, tags, strengthsUsed,
+      text: text.length > 700 ? `${text.slice(0, 700)}…` : text,
+      reflection,
+    }));
 }
+
+/**
+ * Claude provider: sends the question and recent entries to the app's own
+ * /api/ask function, which holds the API key and calls Claude.
+ */
+export const claudeProvider: AskProvider = {
+  name: 'Claude',
+  async ask(question, entries) {
+    const data = await api<{ summary: string[]; matchDates: string[] }>('ask', {
+      method: 'POST',
+      body: JSON.stringify({ mode: 'ask', question, entries: forClaude(entries) }),
+    });
+    const order = new Map(data.matchDates.map((d, i) => [d, i]));
+    const matches = entries.filter((e) => order.has(e.date)).sort((a, b) => order.get(a.date)! - order.get(b.date)!);
+    return { matches, summary: data.summary, terms: [], source: 'ai' };
+  },
+};
 
 export function askJournal(question: string, entries: Entry[], provider: AskProvider = localProvider) {
   return provider.ask(question, entries);
