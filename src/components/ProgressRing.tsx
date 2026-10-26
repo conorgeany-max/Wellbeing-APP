@@ -8,7 +8,7 @@ export function ProgressRing({ value, size = 88, stroke = 8, children }: { value
         <circle cx={size / 2} cy={size / 2} r={r} stroke="rgb(var(--line))" strokeWidth={stroke} fill="none" />
         <circle
           cx={size / 2} cy={size / 2} r={r}
-          stroke="rgb(var(--sage))" strokeWidth={stroke} fill="none" strokeLinecap="round"
+          stroke="rgb(var(--accent))" strokeWidth={stroke} fill="none" strokeLinecap="round"
           strokeDasharray={c} strokeDashoffset={c * (1 - v)}
           style={{ transition: 'stroke-dashoffset 600ms ease' }}
         />

@@ -65,8 +65,8 @@ export default function Journal() {
                       {(e.text || e.reflection) && <p className="mt-2 line-clamp-2 text-sm text-muted">{e.text || e.reflection}</p>}
                       {(e.tags.length > 0 || e.strengthsUsed.length > 0) && (
                         <div className="mt-2 flex flex-wrap gap-1.5 text-xs">
-                          {e.tags.map((t) => <span key={t} className="rounded-full bg-sand px-2 py-0.5 text-muted">{t}</span>)}
-                          {e.strengthsUsed.map((s) => <span key={s} className="rounded-full bg-lavender/20 px-2 py-0.5 text-muted">✦ {name(s)}</span>)}
+                          {e.tags.map((t) => <span key={t} className="rounded-full bg-tint px-2 py-0.5 text-muted">{t}</span>)}
+                          {e.strengthsUsed.map((s) => <span key={s} className="rounded-full bg-pop/20 px-2 py-0.5 text-muted">✦ {name(s)}</span>)}
                         </div>
                       )}
                     </Link>

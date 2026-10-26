@@ -43,14 +43,14 @@ export default function Habits() {
                 </div>
                 <button
                   onClick={() => setHabitDone(h.id, date, !isDone)}
-                  className={`flex h-10 w-10 items-center justify-center rounded-full border text-lg transition ${isDone ? 'border-sage bg-sage text-white' : 'border-line hover:bg-sand'}`}
+                  className={`flex h-10 w-10 items-center justify-center rounded-full border text-lg transition ${isDone ? 'border-accent bg-accent text-white' : 'border-line hover:bg-tint'}`}
                   aria-label={isDone ? `Mark ${h.name} not done today` : `Mark ${h.name} done today`}
                 >
                   {isDone ? '✓' : ''}
                 </button>
               </div>
               {strength && strength.rank > 19 && (
-                <p className="mt-3 rounded-xl bg-sand px-3 py-2 text-xs text-muted">Keep it small and easy to finish. {strength.useIdea}</p>
+                <p className="mt-3 rounded-xl bg-tint px-3 py-2 text-xs text-muted">Keep it small and easy to finish. {strength.useIdea}</p>
               )}
               <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
                 <Heatmap done={done} />
@@ -75,7 +75,7 @@ export default function Habits() {
           {showArchived && (
             <ul className="mt-3 space-y-2">
               {archived.map((h) => (
-                <li key={h.id} className="card-sand flex items-center gap-3 px-4 py-3">
+                <li key={h.id} className="card-tint flex items-center gap-3 px-4 py-3">
                   <span aria-hidden>{h.icon}</span>
                   <span className="flex-1 text-muted">{h.name}</span>
                   <button className="link text-sm" onClick={() => updateHabit(h.id, { archived: false })}>Restore</button>
@@ -126,7 +126,7 @@ function HabitFormBody({ habit, onClose, strengths }: { habit: Habit | null; onC
         <Eyebrow className="mb-2">Icon</Eyebrow>
         <div className="flex flex-wrap gap-1.5">
           {HABIT_ICONS.map((i) => (
-            <button type="button" key={i} onClick={() => setIcon(i)} className={`h-10 w-10 rounded-xl text-xl ${icon === i ? 'bg-sage/20 ring-2 ring-sage' : 'hover:bg-sand'}`}>{i}</button>
+            <button type="button" key={i} onClick={() => setIcon(i)} className={`h-10 w-10 rounded-xl text-xl ${icon === i ? 'bg-accent/20 ring-2 ring-accent' : 'hover:bg-tint'}`}>{i}</button>
           ))}
         </div>
       </div>

@@ -106,7 +106,7 @@ export function CloudSettings() {
               : 'Add ANTHROPIC_API_KEY in Netlify to turn this on.'}
           </p>
         </div>
-        <button role="switch" aria-checked={s.useClaude} disabled={!status.ai} onClick={() => setSetting('useClaude', !s.useClaude)} className={`relative h-7 w-12 rounded-full transition disabled:opacity-40 ${s.useClaude ? 'bg-sage' : 'bg-line'}`}>
+        <button role="switch" aria-checked={s.useClaude} disabled={!status.ai} onClick={() => setSetting('useClaude', !s.useClaude)} className={`relative h-7 w-12 rounded-full transition disabled:opacity-40 ${s.useClaude ? 'bg-accent' : 'bg-line'}`}>
           <span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all ${s.useClaude ? 'left-6' : 'left-1'}`} />
           <span className="sr-only">Use Claude</span>
         </button>

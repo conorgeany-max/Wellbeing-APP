@@ -3,31 +3,31 @@
 @tailwind utilities;
 
 :root {
-  --bg: 247 245 240;      /* #F7F5F0 warm off-white */
-  --ink: 31 42 46;        /* #1F2A2E deep ink */
-  --muted: 104 114 116;
-  --sage: 122 158 135;    /* #7A9E87 */
-  --lavender: 167 155 200;/* #A79BC8 */
-  --sand: 239 233 223;    /* #EFE9DF */
+  --bg: 243 243 243;      /* #F3F3F3 flat studio grey */
+  --ink: 17 17 17;        /* #111111 near-black */
+  --muted: 98 98 104;
+  --accent: 51 0 255;     /* #3300FF electric violet-blue */
+  --pop: 154 160 255;     /* #9AA0FF soft periwinkle */
+  --tint: 233 231 255;    /* #E9E7FF pale lilac */
   --card: 255 255 255;
-  --line: 226 220 209;
-  --mood-1: #B98A9E;
-  --mood-2: #C9A9C8;
-  --mood-3: #D8CFA6;
-  --mood-4: #A9C6A8;
-  --mood-5: #7A9E87;
+  --line: 222 222 226;
+  --mood-1: #F4A6C6;
+  --mood-2: #F8C49A;
+  --mood-3: #F3E08A;
+  --mood-4: #A8DDA0;
+  --mood-5: #9AA0FF;
   color-scheme: light;
 }
 
 .dark {
-  --bg: 20 27 34;         /* #141B22 deep navy */
-  --ink: 232 230 224;
-  --muted: 150 160 166;
-  --sage: 140 180 154;
-  --lavender: 180 168 214;
-  --sand: 31 41 51;
-  --card: 27 36 45;
-  --line: 45 57 68;
+  --bg: 14 14 16;
+  --ink: 243 243 243;
+  --muted: 160 160 168;
+  --accent: 132 116 255;  /* #8474FF */
+  --pop: 170 176 255;
+  --tint: 30 28 52;
+  --card: 26 26 30;
+  --line: 50 50 58;
   color-scheme: dark;
 }
 
@@ -39,35 +39,55 @@ body {
 }
 
 @layer components {
-  .eyebrow { @apply text-[11px] font-semibold uppercase tracking-[0.18em] text-muted; }
-  .headline { @apply font-serif text-ink tracking-tight; }
-  .card { @apply bg-card rounded-card shadow-soft border border-line/60; }
-  .card-sand { @apply bg-sand rounded-card; }
-  .btn { @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition active:scale-[0.98] disabled:opacity-40; }
-  .btn-primary { @apply btn bg-sage text-white hover:brightness-105 shadow-soft; }
-  .btn-ghost { @apply btn text-ink hover:bg-sand; }
-  .btn-outline { @apply btn border border-line text-ink hover:bg-sand; }
-  .chip { @apply inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-sm transition; }
-  .chip-on { @apply bg-sage border-sage text-white; }
-  .input { @apply w-full rounded-xl border border-line bg-card px-4 py-3 text-ink placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-sage/40; }
-  .link { @apply text-sage underline-offset-4 hover:underline; }
+  /* Small condensed caps, like the studio's nav labels */
+  .eyebrow { @apply font-sans text-[11px] font-bold uppercase tracking-[0.08em] text-muted; font-stretch: 75%; }
+  /* Serif lead line that sits above a big headline */
+  .lead { @apply font-serif text-xl leading-tight text-ink sm:text-2xl; }
+  .headline { @apply font-serif font-normal leading-[0.95] text-ink; }
+  /* Heavy condensed caps for big moments */
+  .display { @apply font-sans font-extrabold uppercase leading-[0.85] tracking-[-0.02em] text-ink; font-stretch: 70%; }
+  .card { @apply bg-card rounded-card; }
+  .card-tint { @apply bg-tint rounded-card; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-[2px] px-5 py-3 text-sm font-bold uppercase tracking-[0.04em] transition active:scale-[0.98] disabled:opacity-40; font-stretch: 80%; }
+  .btn-primary { @apply btn bg-accent text-white hover:brightness-110; }
+  .btn-ghost { @apply btn text-ink hover:bg-tint; }
+  .btn-outline { @apply btn border-2 border-ink text-ink hover:bg-ink hover:text-bg; }
+  /* Little white arrow tile on the right of a primary button */
+  .btn-arrow::after { content: '→'; @apply inline-flex h-6 w-6 items-center justify-center rounded-[2px] bg-white text-base text-accent transition-transform; }
+  .btn-arrow:hover::after { transform: translateX(3px); }
+  .chip { @apply inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border-2 border-line bg-card px-3 py-1.5 text-sm font-medium transition; }
+  .chip-on { @apply bg-accent border-accent text-white; }
+  .input { @apply w-full rounded-[2px] border-2 border-transparent bg-card px-4 py-3 text-ink placeholder:text-muted/70 focus:border-accent focus:outline-none; }
+  .link { @apply font-semibold text-ink; }
+  /* Hand-drawn wavy underline in the accent colour */
+  .squiggle, .link {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 8' preserveAspectRatio='none'%3E%3Cpath d='M1 5.5C18 2 30 7 48 4.5S80 1.5 99 4' fill='none' stroke='%233300FF' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 100% 0.35em;
+    padding-bottom: 0.3em;
+  }
+  .dark .squiggle, .dark .link {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 8' preserveAspectRatio='none'%3E%3Cpath d='M1 5.5C18 2 30 7 48 4.5S80 1.5 99 4' fill='none' stroke='%238474FF' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  }
 }
 
-/* Slow-moving gradient behind the Today screen */
-.calm-gradient {
-  background: radial-gradient(60% 50% at 20% 20%, rgb(var(--sage) / 0.22), transparent 70%),
-              radial-gradient(50% 45% at 85% 30%, rgb(var(--lavender) / 0.22), transparent 70%),
-              radial-gradient(60% 50% at 50% 90%, rgb(var(--sand) / 0.9), transparent 70%);
-  background-size: 200% 200%;
-  animation: drift 24s ease-in-out infinite alternate;
+/* Stickers: a gentle bob, with a wiggle on hover */
+.sticker { animation: bob 6s ease-in-out infinite; animation-delay: var(--delay, 0s); }
+.sticker:hover { animation: wiggle 0.5s ease-in-out; }
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(var(--tilt, 0deg)); }
+  50% { transform: translateY(-6px) rotate(calc(var(--tilt, 0deg) + 2deg)); }
 }
-@keyframes drift {
-  0% { background-position: 0% 0%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 30% 100%; }
+@keyframes wiggle {
+  0%, 100% { transform: rotate(var(--tilt, 0deg)) scale(1.05); }
+  33% { transform: rotate(calc(var(--tilt, 0deg) - 6deg)) scale(1.05); }
+  66% { transform: rotate(calc(var(--tilt, 0deg) + 6deg)) scale(1.05); }
 }
+.spin-slow { animation: spin 24s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) {
-  .calm-gradient { animation: none; }
+  .sticker, .sticker:hover, .spin-slow { animation: none; transform: rotate(var(--tilt, 0deg)); }
 }
 
 .pb-safe { padding-bottom: max(env(safe-area-inset-bottom), 0.5rem); }

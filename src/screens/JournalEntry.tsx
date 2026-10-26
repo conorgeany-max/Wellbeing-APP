@@ -85,7 +85,7 @@ export default function JournalEntry() {
           <div className="flex flex-wrap gap-2">
             {strengths.map((s) => (
               <Chip key={s.id} on={used.includes(s.id)} onClick={() => setUsed(toggle(used, s.id, 3))} title={s.description}>
-                {s.rank <= 5 && <span className="text-sage" aria-hidden>✦</span>}{s.name}
+                {s.rank <= 5 && <span className="text-accent" aria-hidden>✦</span>}{s.name}
               </Chip>
             ))}
           </div>

@@ -125,7 +125,7 @@ export default function Report() {
         <Empty>No check-ins in {label} yet. <Link to="/insights" className="link">Back to Insights</Link></Empty>
       ) : (
         <div className="space-y-6">
-          <Card sand>
+          <Card tint>
             <div className="grid grid-cols-2 gap-5 sm:grid-cols-4">
               <Stat label="Check-ins" value={`${entries.length}/${elapsed}`} sub="days" />
               <Stat label="Avg mood" value={fmt1(data.avgMood)} sub={Number.isFinite(prevAvg) ? `${data.avgMood >= prevAvg ? '↑' : '↓'} from ${fmt1(prevAvg)}` : 'first month'} />
@@ -163,7 +163,7 @@ export default function Report() {
                     onClick={(ev) => !e && ev.preventDefault()}
                     title={e ? `${d}: mood ${e.mood}` : d}
                     className="flex aspect-square items-center justify-center rounded-lg text-xs"
-                    style={{ background: e ? moodColor(e.mood) : 'rgb(var(--line) / 0.5)', color: e ? '#1F2A2E' : undefined }}
+                    style={{ background: e ? moodColor(e.mood) : 'rgb(var(--line) / 0.5)', color: e ? '#111111' : undefined }}
                   >
                     {fromISO(d).getDate()}
                   </Link>
@@ -210,7 +210,7 @@ export default function Report() {
             <SectionTitle title="Strengths in action" />
             <div className="flex flex-wrap gap-2">
               {data.strengths.usage.filter((u) => u.count30 > 0).slice(0, 8).map((u) => (
-                <span key={u.strength.id} className="rounded-full bg-lavender/20 px-3 py-1 text-sm">✦ {u.strength.name} <span className="text-muted">{u.count30}</span></span>
+                <span key={u.strength.id} className="rounded-full bg-pop/20 px-3 py-1 text-sm">✦ {u.strength.name} <span className="text-muted">{u.count30}</span></span>
               ))}
             </div>
             {signatureUnused.length > 0 && (
@@ -219,7 +219,7 @@ export default function Report() {
           </Card>
 
           {moments.length > 0 && (
-            <Card sand>
+            <Card tint>
               <SectionTitle title="Good moments" />
               <ul className="space-y-3">
                 {moments.map((e) => (

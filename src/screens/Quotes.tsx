@@ -24,7 +24,7 @@ export default function Quotes() {
   return (
     <Page eyebrow="Quotes" title="Words to steady you" action={<button className="btn-primary px-4 py-2" onClick={() => setAdding(true)}>Add</button>}>
       {qod && (
-        <figure className="card-sand mb-6 p-6">
+        <figure className="card-tint mb-6 p-6">
           <div className="flex items-start justify-between gap-4">
             <Eyebrow>Quote of the day</Eyebrow>
             <Heart q={qod} />
@@ -65,7 +65,7 @@ export default function Quotes() {
 
 function Heart({ q }: { q: Quote }) {
   return (
-    <button onClick={() => toggleFavourite(q)} className={`text-xl transition ${q.favourite ? 'text-lavender' : 'text-line hover:text-muted'}`} aria-label={q.favourite ? 'Remove from favourites' : 'Add to favourites'} aria-pressed={q.favourite}>
+    <button onClick={() => toggleFavourite(q)} className={`text-xl transition ${q.favourite ? 'text-pop' : 'text-line hover:text-muted'}`} aria-label={q.favourite ? 'Remove from favourites' : 'Add to favourites'} aria-pressed={q.favourite}>
       {q.favourite ? '♥' : '♡'}
     </button>
   );

@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { HashRouter, Route, Routes, useLocation } from 'react-router-dom';
-import { BottomNav, SideNav } from './components/Nav';
+import { BottomNav, Logo, TopNav } from './components/Nav';
 import { useSettings } from './db/settings';
 import { ensureSeeded } from './db/seed';
 import { useApplyTheme } from './lib/theme';
@@ -27,9 +27,9 @@ function Shell() {
     window.scrollTo(0, 0);
   }, [pathname]);
   return (
-    <div className="flex min-h-screen">
-      {!immersive && <SideNav />}
-      <div className="min-w-0 flex-1">
+    <div className="min-h-screen">
+      {!immersive && <TopNav />}
+      <div className="min-w-0">
         <Suspense fallback={null}>
           <Routes>
             <Route path="/" element={<Today />} />
@@ -61,7 +61,7 @@ export default function App() {
   useEffect(() => {
     ensureSeeded().finally(() => setReady(true));
   }, []);
-  if (!ready) return <div className="flex min-h-screen items-center justify-center"><p className="headline text-2xl text-muted">Steady</p></div>;
+  if (!ready) return <div className="flex min-h-screen items-center justify-center"><Logo className="text-5xl" /></div>;
   return (
     <HashRouter>
       <Shell />

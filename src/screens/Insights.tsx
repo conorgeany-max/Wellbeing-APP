@@ -44,7 +44,7 @@ export default function Insights() {
       </p>
       <div className="space-y-6">
         {/* Weekly summary */}
-        <Card sand>
+        <Card tint>
           <Eyebrow>This week</Eyebrow>
           <div className="mt-3 grid grid-cols-3 gap-4">
             <Stat label="Avg mood" value={fmt1(data.weekly.avgMood)} sub={Number.isFinite(data.weekly.prevAvg) ? `${fmt1(data.weekly.prevAvg)} last week` : undefined} />
@@ -89,7 +89,7 @@ export default function Insights() {
           {data.strengths.neglected.length > 0 && (
             <ul className="mb-4 space-y-2">
               {data.strengths.neglected.slice(0, 3).map((n) => (
-                <li key={n.strength.id} className="rounded-xl bg-lavender/15 px-4 py-3 text-sm">
+                <li key={n.strength.id} className="rounded-xl bg-pop/15 px-4 py-3 text-sm">
                   {n.daysSince === null ? `You haven't logged ${n.strength.name} yet.` : `You haven't logged ${n.strength.name} in ${n.daysSince} days.`}
                   {n.nWith >= MIN_SAMPLE && ` On days you do, your mood averages ${fmt1(n.avgWith)}.`}
                   <span className="mt-1 block text-xs text-muted">Idea: {n.strength.useIdea}</span>
@@ -205,7 +205,7 @@ function FindingList({ title, eyebrow, items, tone, empty }: { title: string; ey
         <ul className="space-y-3">
           {items.slice(0, 6).map((f) => (
             <li key={f.id} className="flex gap-3 text-sm">
-              <span className={`mt-0.5 flex h-7 min-w-[3rem] items-center justify-center rounded-full px-2 text-xs font-semibold ${tone === 'good' ? 'bg-sage/15 text-sage' : 'bg-lavender/20 text-ink'}`}>
+              <span className={`mt-0.5 flex h-7 min-w-[3rem] items-center justify-center rounded-full px-2 text-xs font-semibold ${tone === 'good' ? 'bg-accent/15 text-accent' : 'bg-pop/20 text-ink'}`}>
                 {f.diff > 0 ? '+' : '−'}{fmt1(Math.abs(f.diff))}
               </span>
               <span>
@@ -228,7 +228,7 @@ function WordColumn({ title, words, tags, n }: { title: string; words: { word: s
         <p className="text-sm text-muted">Not enough days yet.</p>
       ) : (
         <div className="flex flex-wrap gap-1.5">
-          {tags.map(([t, c]) => <span key={`t-${t}`} className="rounded-full bg-sand px-2.5 py-1 text-xs">#{t} <span className="text-muted">{c}</span></span>)}
+          {tags.map(([t, c]) => <span key={`t-${t}`} className="rounded-full bg-tint px-2.5 py-1 text-xs">#{t} <span className="text-muted">{c}</span></span>)}
           {words.map((w) => <span key={w.word} className="rounded-full border border-line px-2.5 py-1 text-xs">{w.word} <span className="text-muted">{w.count}</span></span>)}
           {tags.length + words.length === 0 && <p className="text-sm text-muted">No repeated words yet.</p>}
         </div>
@@ -275,7 +275,7 @@ function AskJournal() {
       {error && <p className="mt-3 text-xs text-muted">{error}</p>}
       {result && (
         <div className="mt-4 space-y-3">
-          <div className="card-sand space-y-1 p-4 text-sm">
+          <div className="card-tint space-y-1 p-4 text-sm">
             {result.summary.map((s, i) => <p key={i}>{s}</p>)}
             {result.terms.length > 1 && <p className="text-xs text-muted">Also matched: {result.terms.slice(1, 8).join(', ')}</p>}
             <p className="pt-1 text-[11px] uppercase tracking-wider text-muted">{result.source === 'ai' ? 'Answered by Claude' : 'Keyword search on this device'}</p>
@@ -283,7 +283,7 @@ function AskJournal() {
           <ul className="space-y-2">
             {result.matches.slice(0, 8).map((e) => (
               <li key={e.id}>
-                <Link to={`/journal/${e.date}`} className="flex gap-3 rounded-xl px-2 py-2 text-sm hover:bg-sand">
+                <Link to={`/journal/${e.date}`} className="flex gap-3 rounded-xl px-2 py-2 text-sm hover:bg-tint">
                   <MoodDot mood={e.mood} />
                   <span className="min-w-0">
                     <span className="block text-xs text-muted">{formatLong(e.date)}</span>

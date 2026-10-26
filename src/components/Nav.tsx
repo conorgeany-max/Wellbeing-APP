@@ -7,39 +7,54 @@ const ITEMS = [
   { to: '/strengths', label: 'Strengths', icon: '✦', desktopOnly: true },
   { to: '/quotes', label: 'Quotes', icon: '❝', desktopOnly: true },
   { to: '/insights', label: 'Insights', icon: '↗' },
-  { to: '/settings', label: 'Settings', icon: '⚙', desktopOnly: true },
   { to: '/more', label: 'More', icon: '⋯', mobileOnly: true },
 ];
 
-const cls = ({ isActive }: { isActive: boolean }) =>
-  `flex items-center gap-3 rounded-full px-4 py-2.5 text-sm transition ${isActive ? 'bg-sage/15 text-ink font-medium' : 'text-muted hover:text-ink hover:bg-sand'}`;
+export function Logo({ className = '' }: { className?: string }) {
+  return <span className={`font-script text-3xl leading-none text-accent ${className}`}>Steady</span>;
+}
 
-export function SideNav() {
+/** Desktop: script logo left, a white box of caps links in the middle, settings tile on the right. */
+export function TopNav() {
   return (
-    <nav className="sticky top-0 hidden h-screen w-56 shrink-0 flex-col gap-1 border-r border-line/60 px-4 py-8 md:flex">
-      <p className="headline mb-6 px-4 text-2xl">Steady</p>
-      {ITEMS.filter((i) => !i.mobileOnly).map((i) => (
-        <NavLink key={i.to} to={i.to} end={i.end} className={cls}>
-          <span className="w-4 text-center" aria-hidden>{i.icon}</span>
-          {i.label}
-        </NavLink>
-      ))}
-    </nav>
+    <header className="sticky top-0 z-40 hidden items-start justify-between px-6 pt-4 md:flex">
+      <NavLink to="/" aria-label="Steady home" className="-rotate-6 transition hover:rotate-0"><Logo className="text-4xl" /></NavLink>
+      <nav className="flex gap-5 bg-card px-5 py-3">
+        {ITEMS.filter((i) => !i.mobileOnly).map((i) => (
+          <NavLink
+            key={i.to}
+            to={i.to}
+            end={i.end}
+            className={({ isActive }) => `eyebrow text-[12px] transition ${isActive ? 'squiggle !text-ink' : '!text-ink/70 hover:!text-ink'}`}
+          >
+            {i.label}
+          </NavLink>
+        ))}
+      </nav>
+      <NavLink to="/settings" className={({ isActive }) => `eyebrow flex items-center gap-2 bg-card px-4 py-3 text-[12px] !text-ink ${isActive ? 'squiggle' : ''}`}>
+        <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
+        Settings
+      </NavLink>
+    </header>
   );
 }
 
 export function BottomNav() {
   return (
-    <nav className="pb-safe fixed inset-x-0 bottom-0 z-40 flex justify-around border-t border-line/60 bg-bg/90 px-2 pt-2 backdrop-blur md:hidden">
+    <nav className="pb-safe fixed inset-x-0 bottom-0 z-40 flex justify-around bg-card px-2 pt-2 md:hidden">
       {ITEMS.filter((i) => !i.desktopOnly).map((i) => (
         <NavLink
           key={i.to}
           to={i.to}
           end={i.end}
-          className={({ isActive }) => `flex min-w-[56px] flex-col items-center gap-0.5 rounded-xl px-2 py-1 text-[11px] ${isActive ? 'text-sage' : 'text-muted'}`}
+          className={({ isActive }) => `flex min-w-[56px] flex-col items-center gap-1 px-2 py-1 ${isActive ? 'text-accent' : 'text-ink/60'}`}
         >
-          <span className="text-lg leading-none" aria-hidden>{i.icon}</span>
-          {i.label}
+          {({ isActive }) => (
+            <>
+              <span className="text-lg leading-none" aria-hidden>{i.icon}</span>
+              <span className={`eyebrow text-[10px] !text-current ${isActive ? 'squiggle' : ''}`}>{i.label}</span>
+            </>
+          )}
         </NavLink>
       ))}
     </nav>

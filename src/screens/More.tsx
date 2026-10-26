@@ -16,7 +16,7 @@ export default function More() {
         {LINKS.map((l) => (
           <li key={l.to}>
             <Link to={l.to} className="card flex items-center gap-4 p-5">
-              <span className="text-2xl text-sage" aria-hidden>{l.icon}</span>
+              <span className="text-2xl text-accent" aria-hidden>{l.icon}</span>
               <span><span className="headline block text-xl">{l.title}</span><span className="text-sm text-muted">{l.sub}</span></span>
             </Link>
           </li>
