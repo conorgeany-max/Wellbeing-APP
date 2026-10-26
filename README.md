@@ -64,32 +64,44 @@ scripts/       check-insights.ts (sanity check for the insights engine)
 
 The data model (`src/db/types.ts`): `Entry`, `Habit`, `HabitLog`, `Quote`, `Strength`. Every record has a string `id` and `updatedAt`, so it can later sync to a backend such as Supabase without changing shape.
 
-## Plugging in Claude for "Ask my journal"
+## Hosting and cloud features (Netlify)
 
-Out of the box, Ask my journal uses private on-device keyword search plus simple stats (`localProvider` in `src/lib/ask.ts`). To answer questions in natural language, run a small backend that holds your API key (never put a key in the browser) and paste its URL into **Settings → Ask my journal (advanced)**. The app POSTs `{ question, entries }` and expects `{ summary: string[], matchDates: string[] }`.
+Steady works fully offline on its own. When it's hosted on Netlify it also gets:
 
-A minimal backend using the official SDK (`npm install @anthropic-ai/sdk`):
+- **Sync and backup:** every device you connect shares the same data, and a copy is kept in your Netlify account (Netlify Blobs). Each record syncs separately and the newest change wins, so you can use your phone and laptop side by side. Sample data never syncs.
+- **Claude for "Ask my journal":** ask questions in plain language ("What helps when I'm anxious?"). Your question and recent entries go to Anthropic to answer it. It's off until you turn it on in Settings, and keyword search stays available.
+- **Reminder notifications:** a gentle nudge at your reminder time, even when the app is closed, skipped on days you've already checked in. On iPhone this needs iOS 16.4+ and Steady added to the Home Screen.
+- **Monthly reflection:** works everywhere; on the hosted app Claude can also write a short reflection for the month.
 
-```ts
-import Anthropic from '@anthropic-ai/sdk';
+### One-time setup
 
-const client = new Anthropic(); // reads ANTHROPIC_API_KEY
+1. **Connect the repo:** in Netlify, open the `steady-wellbeing` project → *Project configuration* → *Build & deploy* → *Link repository*, pick this GitHub repo and the `main` branch. Netlify reads `netlify.toml` for the rest.
+2. **Environment variables** (*Project configuration* → *Environment variables*, scope *Functions*):
 
-export async function answer(question: string, entries: unknown[]) {
-  const response = await client.messages.create({
-    model: 'claude-opus-5-5',
-    max_tokens: 16000,
-    system:
-      'You help someone reflect on their private journal. Answer kindly and briefly, as observations, never medical advice. ' +
-      'Reply with JSON only: {"summary": string[] (2-4 short sentences), "matchDates": string[] (YYYY-MM-DD of relevant entries)}.',
-    messages: [{ role: 'user', content: `Journal entries:\n${JSON.stringify(entries)}\n\nQuestion: ${question}` }],
-  });
-  const text = response.content.find((b) => b.type === 'text');
-  return JSON.parse(text && text.type === 'text' ? text.text : '{"summary":[],"matchDates":[]}');
-}
+   | Variable | What it is |
+   | --- | --- |
+   | `STEADY_ACCESS_CODE` | The code each device enters once in Settings → *Sync, Claude and reminders*. Long and random. |
+   | `ANTHROPIC_API_KEY` | Your key from https://console.anthropic.com. Needed for Claude answers and monthly write-ups. |
+   | `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` | Keys for push notifications. Generate with `npx web-push generate-vapid-keys`. |
+   | `VAPID_SUBJECT` | A contact URL or `mailto:` address for push services, e.g. your site URL. |
+
+   After changing a variable, trigger a new deploy so functions pick it up.
+3. **On each device:** open the site, go to Settings → *Sync, Claude and reminders*, enter the access code, then turn on Claude and notifications if you want them. Turn off sample data once you start using it for real.
+
+### How it fits together
+
+```
+netlify/functions/
+  status.mts     GET  /api/status   which features are set up, and whether the access code works
+  sync.mts       GET/PUT/DELETE /api/sync   the cloud snapshot (ETag-checked so devices can't overwrite each other)
+  ask.mts        POST /api/ask      calls Claude with the Anthropic SDK; the API key never reaches the browser
+  push.mts       GET/POST/DELETE /api/push  saves this device's push subscription and reminder time
+  reminders.mts  scheduled every 15 minutes: sends reminders in each device's own timezone
+src/lib/sync.ts  merge logic (newest change wins per record, deletions sync as tombstones)
+public/push-sw.js  shows notifications from the service worker
 ```
 
-If the backend fails, the app falls back to keyword search.
+`npm run dev` runs these functions locally too (through `@netlify/vite-plugin`). Set the variables in your shell first, for example `STEADY_ACCESS_CODE=local-test npm run dev`.
 
 ## Support
 
