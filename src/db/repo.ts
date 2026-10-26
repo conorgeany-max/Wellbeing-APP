@@ -58,7 +58,15 @@ export async function saveEntry(input: EntryInput): Promise<Entry> {
 export const updateEntry = (id: string, patch: Partial<Entry>) =>
   db.entries.update(id, { ...patch, updatedAt: Date.now(), sample: false });
 
-export const deleteEntry = (id: string) => db.entries.delete(id);
+/** Delete a record and remember the deletion so it can sync to other devices. */
+async function deleteWithTombstone(table: 'entries' | 'habitLogs' | 'quotes', id: string) {
+  await db.transaction('rw', db.table(table), db.tombstones, async () => {
+    await db.table(table).delete(id);
+    await db.tombstones.put({ key: `${table}:${id}`, table, id, updatedAt: Date.now() });
+  });
+}
+
+export const deleteEntry = (id: string) => deleteWithTombstone('entries', id);
 
 // ---------- Habits ----------
 
@@ -74,11 +82,11 @@ export const updateHabit = (id: string, patch: Partial<Habit>) =>
 export async function setHabitDone(habitId: string, date: string, done: boolean) {
   const id = `${habitId}:${date}`;
   if (done) await db.habitLogs.put({ id, habitId, date, done: true, updatedAt: Date.now() });
-  else await db.habitLogs.delete(id);
+  else if (await db.habitLogs.get(id)) await deleteWithTombstone('habitLogs', id);
 }
 
 export async function setHabitsForDate(date: string, doneIds: Set<string>, habits: Habit[]) {
-  await db.transaction('rw', db.habitLogs, async () => {
+  await db.transaction('rw', db.habitLogs, db.tombstones, async () => {
     for (const h of habits) await setHabitDone(h.id, date, doneIds.has(h.id));
   });
 }
@@ -91,7 +99,7 @@ export const toggleFavourite = (q: Quote) =>
 export const addQuote = (text: string, author: string, strength?: string) =>
   db.quotes.add({ id: uid(), text, author: author || 'Me', strength, favourite: true, custom: true, updatedAt: Date.now() });
 
-export const deleteQuote = (id: string) => db.quotes.delete(id);
+export const deleteQuote = (id: string) => deleteWithTombstone('quotes', id);
 
 // ---------- Strengths ----------
 
@@ -107,6 +115,9 @@ export async function resetStrengthOrder() {
 }
 
 // ---------- Export / import / delete ----------
+
+// Cloud connection details belong to this device and never go into an export file.
+const DEVICE_ONLY = ['accessCode', 'lastSync', 'pushEnabled', 'useClaude'];
 
 export interface ExportFile {
   app: 'steady';
@@ -130,12 +141,13 @@ export async function exportAll(): Promise<ExportFile> {
     habitLogs: await db.habitLogs.toArray(),
     quotes: await db.quotes.toArray(),
     strengths: await db.strengths.toArray(),
-    settings: await db.settings.toArray(),
+    settings: (await db.settings.toArray()).filter((r) => !DEVICE_ONLY.includes(r.key)),
   };
 }
 
 export async function importAll(data: ExportFile) {
   if (data?.app !== 'steady') throw new Error('This file does not look like a Steady export.');
+  const keep = (await db.settings.toArray()).filter((r) => DEVICE_ONLY.includes(r.key));
   await db.transaction('rw', [db.entries, db.habits, db.habitLogs, db.quotes, db.strengths, db.settings], async () => {
     await Promise.all([db.entries.clear(), db.habits.clear(), db.habitLogs.clear(), db.quotes.clear(), db.strengths.clear(), db.settings.clear()]);
     await db.entries.bulkPut(data.entries ?? []);
@@ -144,14 +156,15 @@ export async function importAll(data: ExportFile) {
     await db.quotes.bulkPut(data.quotes ?? []);
     await db.strengths.bulkPut(data.strengths ?? []);
     await db.settings.bulkPut(data.settings ?? []);
+    await db.settings.bulkPut(keep);
     await db.settings.put({ key: 'seeded', value: true });
   });
 }
 
 /** Wipe everything, then start fresh with starter content but no demo data. */
 export async function deleteAllData() {
-  await db.transaction('rw', [db.entries, db.habits, db.habitLogs, db.quotes, db.strengths, db.settings], async () => {
-    await Promise.all([db.entries.clear(), db.habits.clear(), db.habitLogs.clear(), db.quotes.clear(), db.strengths.clear(), db.settings.clear()]);
+  await db.transaction('rw', [db.entries, db.habits, db.habitLogs, db.quotes, db.strengths, db.settings, db.tombstones], async () => {
+    await Promise.all([db.entries.clear(), db.habits.clear(), db.habitLogs.clear(), db.quotes.clear(), db.strengths.clear(), db.settings.clear(), db.tombstones.clear()]);
   });
   await ensureSeeded();
   await removeSampleData();

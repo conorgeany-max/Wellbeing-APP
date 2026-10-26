@@ -10,14 +10,17 @@ import { addDays, fromISO, today } from '../lib/date';
 export async function ensureSeeded() {
   const settings = await getSettings();
   if (settings.seeded) return;
-  const now = Date.now();
+  // Starter content is identical on every device, so it gets updatedAt 0:
+  // any real edit wins over it when syncing, and two fresh devices don't
+  // trade copies of the same records.
+  const SEED_TIME = 0;
   await db.transaction('rw', [db.strengths, db.quotes, db.habits, db.settings, db.entries, db.habitLogs], async () => {
-    await db.strengths.bulkPut(STRENGTHS.map((s) => ({ ...s, updatedAt: now })));
+    await db.strengths.bulkPut(STRENGTHS.map((s) => ({ ...s, updatedAt: SEED_TIME })));
     await db.quotes.bulkPut(
-      QUOTES.map((q, i) => ({ id: `q-${i}`, ...q, favourite: false, custom: false, updatedAt: now })),
+      QUOTES.map((q, i) => ({ id: `q-${i}`, ...q, favourite: false, custom: false, updatedAt: SEED_TIME })),
     );
     await db.habits.bulkPut(
-      STARTER_HABITS.map((h, i) => ({ ...h, archived: false, order: i, createdAt: now, updatedAt: now })),
+      STARTER_HABITS.map((h, i) => ({ ...h, archived: false, order: i, createdAt: SEED_TIME, updatedAt: SEED_TIME })),
     );
     await setSetting('seeded', true);
     await setSetting('sampleData', true);

@@ -6,6 +6,9 @@ import { SUPPORT } from '../data/support';
 import { today } from '../lib/date';
 import { Chip, Eyebrow, Page } from '../components/ui';
 import { SupportContent } from '../components/Support';
+import { CloudSettings } from '../components/CloudSettings';
+import { updatePushTime } from '../lib/push';
+import { deleteCloudCopy } from '../lib/sync';
 
 export default function Settings() {
   const s = useSettings();
@@ -31,6 +34,7 @@ export default function Settings() {
   const setReminder = async (time: string) => {
     if (time && typeof Notification !== 'undefined' && Notification.permission === 'default') await Notification.requestPermission();
     await setSetting('reminderTime', time || null);
+    if (time && s.pushEnabled) await updatePushTime(time).catch(() => flash('Saved here, but could not update the reminder server.'));
   };
 
   const toggleSample = async (on: boolean) => {
@@ -62,6 +66,9 @@ export default function Settings() {
 
   const doDelete = async () => {
     if (!confirm('Delete all entries, habits, logs and custom quotes? This cannot be undone. Consider exporting first.')) return;
+    if (s.accessCode && confirm('Also delete your cloud backup? If you choose Cancel, your data will come back the next time this device syncs.')) {
+      await deleteCloudCopy().catch(() => undefined);
+    }
     await deleteAllData();
     flash('Everything has been cleared.');
   };
@@ -81,12 +88,16 @@ export default function Settings() {
               {(['system', 'light', 'dark'] as ThemeMode[]).map((t) => <Chip key={t} on={s.theme === t} onClick={() => setSetting('theme', t)}>{t[0].toUpperCase() + t.slice(1)}</Chip>)}
             </div>
           </Row>
-          <Row label="Daily reminder" hint={notifBlocked ? 'Notifications are blocked in your browser settings.' : 'Shown when Steady is open or installed.'}>
+          <Row label="Daily reminder" hint={notifBlocked ? 'Notifications are blocked in your browser settings.' : s.pushEnabled ? 'Sent as a notification, even when Steady is closed.' : 'Shown while Steady is open. Turn on notifications below for reminders when it is closed.'}>
             <div className="flex items-center gap-2">
               <input type="time" className="input w-32 py-2" value={s.reminderTime ?? ''} onChange={(e) => setReminder(e.target.value)} />
               {s.reminderTime && <button className="text-xs text-muted" onClick={() => setReminder('')}>Off</button>}
             </div>
           </Row>
+        </Group>
+
+        <Group title="Sync, Claude and reminders">
+          <CloudSettings />
         </Group>
 
         <Group title="Need support?">
@@ -116,8 +127,8 @@ export default function Settings() {
           <button className="link mt-3 text-sm" onClick={() => resetStrengthOrder()}>Reset to my original ranking</button>
         </Group>
 
-        <Group title="Your data" hint="Everything stays on this device. Nothing is sent anywhere.">
-          <Row label="Sample data" hint="30 days of example entries so Insights has something to show.">
+        <Group title="Your data" hint={s.accessCode ? 'Stored on this device and backed up to your own Netlify account.' : 'Everything stays on this device. Nothing is sent anywhere.'}>
+          <Row label="Sample data" hint="30 days of example entries so Insights has something to show. Sample entries never sync.">
             <Toggle on={s.sampleData} onChange={toggleSample} />
           </Row>
           <div className="flex flex-wrap gap-2 pt-2">
@@ -126,10 +137,6 @@ export default function Settings() {
             <input ref={fileRef} type="file" accept="application/json" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void doImport(f); e.target.value = ''; }} />
             <button className="btn-ghost text-muted" onClick={doDelete}>Delete all data</button>
           </div>
-        </Group>
-
-        <Group title="Ask my journal (advanced)" hint="Optional. The URL of your own backend that answers questions with an AI model. Leave blank to use private on-device keyword search.">
-          <input key={s.askEndpoint} className="input" type="url" placeholder="https://your-backend.example.com/ask" defaultValue={s.askEndpoint} onBlur={(e) => setSetting('askEndpoint', e.target.value.trim())} />
         </Group>
 
         <p className="pt-4 text-center text-xs text-muted">Steady is for self-reflection. It offers observations, not medical advice.</p>

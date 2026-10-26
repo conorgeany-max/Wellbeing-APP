@@ -1,5 +1,5 @@
 import Dexie, { type Table } from 'dexie';
-import type { Entry, Habit, HabitLog, Quote, Setting, Strength } from './types';
+import type { Entry, Habit, HabitLog, Quote, Setting, Strength, Tombstone } from './types';
 
 class SteadyDB extends Dexie {
   entries!: Table<Entry, string>;
@@ -8,6 +8,7 @@ class SteadyDB extends Dexie {
   quotes!: Table<Quote, string>;
   strengths!: Table<Strength, string>;
   settings!: Table<Setting, string>;
+  tombstones!: Table<Tombstone, string>;
 
   constructor() {
     super('steady');
@@ -19,6 +20,8 @@ class SteadyDB extends Dexie {
       strengths: 'id, rank',
       settings: 'key',
     });
+    // v2: remember deletions so they can sync to other devices.
+    this.version(2).stores({ tombstones: 'key, updatedAt' });
   }
 }
 

@@ -1,15 +1,18 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import netlify from '@netlify/vite-plugin';
 
 export default defineConfig({
   // Relative base so the build works from any folder or static host.
   base: './',
   plugins: [
     react(),
+    // Runs the Netlify functions (and their storage) inside `npm run dev`.
+    netlify(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icon.svg'],
+      includeAssets: ['icon.svg', 'push-sw.js'],
       manifest: {
         name: 'Steady',
         short_name: 'Steady',
@@ -25,6 +28,8 @@ export default defineConfig({
         ],
       },
       workbox: {
+        importScripts: ['push-sw.js'], // reminder notifications
+        navigateFallbackDenylist: [/^\/api\//],
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
         runtimeCaching: [
           {

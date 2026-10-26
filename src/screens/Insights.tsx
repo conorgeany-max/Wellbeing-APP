@@ -6,7 +6,7 @@ import {
 import { useEntries, useHabitLogs, useHabits, useStrengths } from '../db/repo';
 import { useSettings } from '../db/settings';
 import { computeInsights, type Finding } from '../lib/insights';
-import { askJournal, localProvider, remoteProvider, type AskResult } from '../lib/ask';
+import { askJournal, claudeProvider, localProvider, type AskResult } from '../lib/ask';
 import { formatShort, formatLong } from '../lib/date';
 import { MIN_SAMPLE, fmt1, plural } from '../lib/stats';
 import { useChartTheme } from '../lib/chartTheme';
@@ -38,7 +38,7 @@ export default function Insights() {
   const loggedInRange = data.series.filter((p) => p.mood !== null).length;
 
   return (
-    <Page eyebrow="Insights" title="What helps, what doesn't">
+    <Page eyebrow="Insights" title="What helps, what doesn't" action={<Link to="/report" className="btn-outline whitespace-nowrap px-4 py-2">Monthly</Link>}>
       <p className="-mt-3 mb-6 text-sm text-muted">
         Based on {plural(data.entryCount, 'check-in')}. Patterns only appear once there are at least {MIN_SAMPLE} days to compare, and they are observations, not advice.
       </p>
@@ -239,7 +239,8 @@ function WordColumn({ title, words, tags, n }: { title: string; words: { word: s
 
 function AskJournal() {
   const entries = useEntries();
-  const { askEndpoint } = useSettings();
+  const { useClaude, accessCode } = useSettings();
+  const claude = useClaude && !!accessCode;
   const [q, setQ] = useState('');
   const [result, setResult] = useState<AskResult | null>(null);
   const [busy, setBusy] = useState(false);
@@ -249,10 +250,10 @@ function AskJournal() {
     if (!question.trim()) return;
     setBusy(true); setError('');
     try {
-      const provider = askEndpoint ? remoteProvider(askEndpoint) : localProvider;
+      const provider = claude ? claudeProvider : localProvider;
       setResult(await askJournal(question, entries, provider));
     } catch (e) {
-      setError(`${e instanceof Error ? e.message : 'Something went wrong'}. Showing keyword results instead.`);
+      setError(`${e instanceof Error ? e.message : 'Something went wrong.'} Showing keyword results instead.`);
       setResult(await askJournal(question, entries, localProvider));
     } finally {
       setBusy(false);
@@ -261,10 +262,10 @@ function AskJournal() {
 
   return (
     <Card>
-      <SectionTitle eyebrow="Ask my journal" title="Look back" hint="Ask a question or type a word. It searches your entries and summarises the pattern." />
+      <SectionTitle eyebrow="Ask my journal" title="Look back" hint={claude ? 'Ask anything. Claude reads your recent entries and answers.' : 'Ask a question or type a word. It searches your entries and summarises the pattern.'} />
       <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); void ask(q); }}>
         <input className="input" placeholder="When did I feel anxious?" value={q} onChange={(e) => setQ(e.target.value)} />
-        <button className="btn-primary" disabled={busy || !q.trim()}>{busy ? '…' : 'Ask'}</button>
+        <button className="btn-primary" disabled={busy || !q.trim()}>{busy ? 'Thinking…' : 'Ask'}</button>
       </form>
       <div className="mt-2 flex flex-wrap gap-1.5">
         {['When did I feel anxious?', 'sleep', 'friends', 'work'].map((s) => (
@@ -277,6 +278,7 @@ function AskJournal() {
           <div className="card-sand space-y-1 p-4 text-sm">
             {result.summary.map((s, i) => <p key={i}>{s}</p>)}
             {result.terms.length > 1 && <p className="text-xs text-muted">Also matched: {result.terms.slice(1, 8).join(', ')}</p>}
+            <p className="pt-1 text-[11px] uppercase tracking-wider text-muted">{result.source === 'ai' ? 'Answered by Claude' : 'Keyword search on this device'}</p>
           </div>
           <ul className="space-y-2">
             {result.matches.slice(0, 8).map((e) => (

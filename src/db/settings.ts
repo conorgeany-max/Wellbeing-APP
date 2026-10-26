@@ -15,9 +15,16 @@ export interface Settings {
   sampleData: boolean;
   strengthOfWeek: StrengthOfWeek | null;
   name: string;
-  askEndpoint: string; // optional AI backend for "Ask my journal"
   seeded: boolean;
+  // Cloud features (only on the hosted app)
+  accessCode: string;
+  useClaude: boolean;
+  lastSync: number | null;
+  pushEnabled: boolean;
 }
+
+/** Settings that follow you between devices. Everything else stays on this device. */
+export const SYNCED_SETTINGS: (keyof Settings)[] = ['name', 'country', 'strengthOfWeek'];
 
 export const DEFAULT_SETTINGS: Settings = {
   theme: 'system',
@@ -26,8 +33,11 @@ export const DEFAULT_SETTINGS: Settings = {
   sampleData: true,
   strengthOfWeek: null,
   name: '',
-  askEndpoint: '',
   seeded: false,
+  accessCode: '',
+  useClaude: false,
+  lastSync: null,
+  pushEnabled: false,
 };
 
 export async function getSettings(): Promise<Settings> {
@@ -38,7 +48,7 @@ export async function getSettings(): Promise<Settings> {
 }
 
 export function setSetting<K extends keyof Settings>(key: K, value: Settings[K]) {
-  return db.settings.put({ key, value });
+  return db.settings.put(SYNCED_SETTINGS.includes(key) ? { key, value, updatedAt: Date.now() } : { key, value });
 }
 
 export function useSettings(): Settings {
