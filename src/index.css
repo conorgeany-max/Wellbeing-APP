@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 247 245 240;      /* #F7F5F0 warm off-white */
+  --ink: 31 42 46;        /* #1F2A2E deep ink */
+  --muted: 104 114 116;
+  --sage: 122 158 135;    /* #7A9E87 */
+  --lavender: 167 155 200;/* #A79BC8 */
+  --sand: 239 233 223;    /* #EFE9DF */
+  --card: 255 255 255;
+  --line: 226 220 209;
+  --mood-1: #B98A9E;
+  --mood-2: #C9A9C8;
+  --mood-3: #D8CFA6;
+  --mood-4: #A9C6A8;
+  --mood-5: #7A9E87;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: 20 27 34;         /* #141B22 deep navy */
+  --ink: 232 230 224;
+  --muted: 150 160 166;
+  --sage: 140 180 154;
+  --lavender: 180 168 214;
+  --sand: 31 41 51;
+  --card: 27 36 45;
+  --line: 45 57 68;
+  color-scheme: dark;
+}
+
+html, body, #root { min-height: 100%; }
+
+body {
+  @apply bg-bg text-ink font-sans antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@layer components {
+  .eyebrow { @apply text-[11px] font-semibold uppercase tracking-[0.18em] text-muted; }
+  .headline { @apply font-serif text-ink tracking-tight; }
+  .card { @apply bg-card rounded-card shadow-soft border border-line/60; }
+  .card-sand { @apply bg-sand rounded-card; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition active:scale-[0.98] disabled:opacity-40; }
+  .btn-primary { @apply btn bg-sage text-white hover:brightness-105 shadow-soft; }
+  .btn-ghost { @apply btn text-ink hover:bg-sand; }
+  .btn-outline { @apply btn border border-line text-ink hover:bg-sand; }
+  .chip { @apply inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-sm transition; }
+  .chip-on { @apply bg-sage border-sage text-white; }
+  .input { @apply w-full rounded-xl border border-line bg-card px-4 py-3 text-ink placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-sage/40; }
+  .link { @apply text-sage underline-offset-4 hover:underline; }
+}
+
+/* Slow-moving gradient behind the Today screen */
+.calm-gradient {
+  background: radial-gradient(60% 50% at 20% 20%, rgb(var(--sage) / 0.22), transparent 70%),
+              radial-gradient(50% 45% at 85% 30%, rgb(var(--lavender) / 0.22), transparent 70%),
+              radial-gradient(60% 50% at 50% 90%, rgb(var(--sand) / 0.9), transparent 70%);
+  background-size: 200% 200%;
+  animation: drift 24s ease-in-out infinite alternate;
+}
+@keyframes drift {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 30% 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .calm-gradient { animation: none; }
+}
+
+.pb-safe { padding-bottom: max(env(safe-area-inset-bottom), 0.5rem); }
+textarea { resize: none; }
