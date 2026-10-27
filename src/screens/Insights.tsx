@@ -38,7 +38,7 @@ export default function Insights() {
   const loggedInRange = data.series.filter((p) => p.mood !== null).length;
 
   return (
-    <Page eyebrow="Insights" title="What helps, what doesn't" action={<Link to="/report" className="btn-outline whitespace-nowrap px-4 py-2">Monthly</Link>}>
+    <Page wide eyebrow="Insights" title="What helps, what doesn't" action={<Link to="/report" className="btn-outline whitespace-nowrap px-4 py-2">Monthly</Link>}>
       <p className="-mt-3 mb-6 text-sm text-muted">
         Based on {plural(data.entryCount, 'check-in')}. Patterns only appear once there are at least {MIN_SAMPLE} days to compare, and they are observations, not advice.
       </p>
@@ -267,9 +267,9 @@ function AskJournal() {
         <input className="input" placeholder="When did I feel anxious?" value={q} onChange={(e) => setQ(e.target.value)} />
         <button className="btn-primary" disabled={busy || !q.trim()}>{busy ? 'Thinking…' : 'Ask'}</button>
       </form>
-      <div className="mt-2 flex flex-wrap gap-1.5">
+      <div className="mt-3 flex flex-wrap gap-2">
         {['When did I feel anxious?', 'sleep', 'friends', 'work'].map((s) => (
-          <button key={s} className="text-xs text-muted underline-offset-4 hover:underline" onClick={() => { setQ(s); void ask(s); }}>{s}</button>
+          <button key={s} className="chip py-2.5 text-xs text-muted hover:text-ink" onClick={() => { setQ(s); void ask(s); }}>{s}</button>
         ))}
       </div>
       {error && <p className="mt-3 text-xs text-muted">{error}</p>}

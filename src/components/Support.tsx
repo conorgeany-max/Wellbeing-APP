@@ -33,7 +33,7 @@ export function SupportLink({ className = '' }: { className?: string }) {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <button type="button" onClick={() => setOpen(true)} className={`text-sm text-muted underline-offset-4 hover:text-ink hover:underline ${className}`}>
+      <button type="button" onClick={() => setOpen(true)} className={`px-2 py-2.5 text-sm text-muted underline-offset-4 hover:text-ink hover:underline ${className}`}>
         Need support?
       </button>
       <Modal open={open} onClose={() => setOpen(false)} title="Need support?">

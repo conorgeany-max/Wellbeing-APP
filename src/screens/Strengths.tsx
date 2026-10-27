@@ -78,7 +78,7 @@ export default function Strengths() {
                   )}
                 </div>
               </div>
-              {focusId !== s.id && <button className="link mt-3 self-start text-xs" onClick={() => pickFocus(s.id)}>Make this my strength of the week</button>}
+              {focusId !== s.id && <button className="mt-1 self-start py-2.5 text-xs" onClick={() => pickFocus(s.id)}><span className="link">Make this my strength of the week</span></button>}
             </Card>
           );
         })}

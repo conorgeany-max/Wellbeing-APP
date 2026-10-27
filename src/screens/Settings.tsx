@@ -115,16 +115,16 @@ export default function Settings() {
               const st = strengths.find((x) => x.id === id);
               if (!st) return null;
               return (
-                <li key={id} className={`flex items-center gap-2 rounded-xl px-3 py-1.5 ${i < 5 ? 'bg-accent/10' : ''}`}>
+                <li key={id} className={`flex items-center gap-2 rounded-xl py-0.5 pl-3 pr-1 ${i < 5 ? 'bg-accent/10' : ''}`}>
                   <span className="w-6 text-right text-sm text-muted">{i + 1}</span>
                   <span className="flex-1 text-sm">{st.name}</span>
-                  <button className="btn-ghost px-2 py-1" onClick={() => move(i, -1)} disabled={i === 0} aria-label={`Move ${st.name} up`}>↑</button>
-                  <button className="btn-ghost px-2 py-1" onClick={() => move(i, 1)} disabled={i === order.length - 1} aria-label={`Move ${st.name} down`}>↓</button>
+                  <button className="btn-ghost h-10 w-10 px-0 py-0" onClick={() => move(i, -1)} disabled={i === 0} aria-label={`Move ${st.name} up`}>↑</button>
+                  <button className="btn-ghost h-10 w-10 px-0 py-0" onClick={() => move(i, 1)} disabled={i === order.length - 1} aria-label={`Move ${st.name} down`}>↓</button>
                 </li>
               );
             })}
           </ol>
-          <button className="link mt-3 text-sm" onClick={() => resetStrengthOrder()}>Reset to my original ranking</button>
+          <button className="mt-1 py-2.5 text-sm" onClick={() => resetStrengthOrder()}><span className="link">Reset to my original ranking</span></button>
         </Group>
 
         <Group title="Your data" hint={s.accessCode ? 'Stored on this device and backed up to your own Netlify account.' : 'Everything stays on this device. Nothing is sent anywhere.'}>

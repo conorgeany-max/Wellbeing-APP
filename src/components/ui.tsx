@@ -21,13 +21,13 @@ export function MixedTitle({ children, className = '' }: { children: ReactNode; 
 }
 
 /** Standard screen wrapper: serif lead line + mixed headline + content, rising in gently. */
-export function Page({ eyebrow, title, action, children }: { eyebrow: string; title: ReactNode; action?: ReactNode; children: ReactNode }) {
+export function Page({ eyebrow, title, action, wide = false, children }: { eyebrow: string; title: ReactNode; action?: ReactNode; wide?: boolean; children: ReactNode }) {
   return (
     <motion.main
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      className="mx-auto w-full max-w-2xl px-4 pb-28 pt-10 sm:px-6 md:pb-16 md:pt-8"
+      className={`mx-auto w-full max-w-2xl px-4 pb-28 pt-10 sm:px-6 md:pb-16 md:pt-8 ${wide ? 'lg:max-w-5xl' : ''}`}
     >
       <header className="mb-10 flex flex-col items-center gap-4 text-center">
         <p className="lead">{eyebrow}</p>
@@ -74,12 +74,12 @@ export function Modal({ open, onClose, children, title }: { open: boolean; onClo
         aria-label={title}
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
-        className="card max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-b-none p-6 sm:rounded-card"
+        className="card max-h-[90dvh] w-full max-w-lg overflow-y-auto overscroll-contain rounded-b-none p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:rounded-card"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">
           <h2 className="headline text-3xl">{title}</h2>
-          <button onClick={onClose} className="btn-ghost px-3 py-2" aria-label="Close">✕</button>
+          <button onClick={onClose} className="btn-ghost -mr-2 h-11 w-11 px-0 py-0" aria-label="Close">✕</button>
         </div>
         {children}
       </motion.div>
