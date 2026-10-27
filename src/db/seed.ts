@@ -20,7 +20,7 @@ export async function ensureSeeded() {
       QUOTES.map((q, i) => ({ id: `q-${i}`, ...q, favourite: false, custom: false, updatedAt: SEED_TIME })),
     );
     await db.habits.bulkPut(
-      STARTER_HABITS.map((h, i) => ({ ...h, archived: false, order: i, createdAt: SEED_TIME, updatedAt: SEED_TIME })),
+      STARTER_HABITS.map(({ active, ...h }, i) => ({ ...h, archived: !active, order: i, createdAt: SEED_TIME, updatedAt: SEED_TIME })),
     );
     await setSetting('seeded', true);
     await setSetting('sampleData', true);

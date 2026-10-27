@@ -35,13 +35,13 @@ Once installed it works offline.
 
 ## What's inside
 
-- **Today:** greeting, quote of the day, start check-in, habit progress ring and check-in streak. Missing days just shows "Welcome back".
+- **Today:** greeting, quote of the day, start check-in, habit progress ring and check-in streak. Missing days just shows "Welcome back". After you check in, Today becomes "Today so far": your mood, a line you wrote, and the habits still to do (tap to tick). It also brings back one of your past entries: after a low check-in, a time you felt like this before and what you wrote once it lifted; otherwise an entry from this day weeks or months ago, or one of your good days.
 - **Check-in (4 steps):** 01 Check in (mood, energy, sleep) · 02 Clear (free-write + tags) · 03 Habits · 04 Reflect (quote, prompt, strengths used). Swipe or tap Next. Low check-ins get one small strength-based suggestion and a "Need support?" link.
 - **Journal:** entries by month with a mood dot, tags, full-text search, read and edit.
-- **Habits:** create, edit, archive; daily or X times a week; link to a strength; 12-week heatmap, current and best streaks, 30-day consistency. Habits tied to lesser strengths get a gentle "keep it small" nudge.
+- **Habits:** three starter habits are active (the other nine starter ideas wait under Archived, ready to restore); create, edit, archive; daily or X times a week; link to a strength; 12-week heatmap, current and best streaks, 30-day consistency. Habits tied to lesser strengths get a gentle "keep it small" nudge.
 - **Strengths:** your ranked 24 strengths, signature strength cards (use-it-today idea, days used in the last 30, average mood when used) and a Strength of the week with a tiny daily challenge.
 - **Quotes:** ~100 built-in quotes (stoic, mindfulness, inspirational), many tagged by strength; favourites; add your own.
-- **Insights:** mood and energy over 7/30/90 days, what helps and what weighs on you (habits, tags, strengths), sleep vs mood, best and hardest weekday, habit consistency, words and tags on good vs low days, weekly summary, strengths you haven't used lately, and "Ask my journal".
+- **Insights:** mood and energy over 7/30/90 days, what helps and what weighs on you (habits, tags, strengths), sleep vs mood, best and hardest weekday, habit consistency, words and tags on good vs low days, weekly summary, strengths you haven't used lately, and "Ask my journal". Anything linked with higher mood has a "Try it for 7 days" button: the experiment shows on Today with a day-by-day tracker, and after the week it reports how often you did it and how your mood compared with the two weeks before.
 - **Settings:** theme (system/light/dark), daily reminder, country for support lines, strengths ranking editor, sample data toggle, export/import JSON, delete all.
 
 Insights only show a pattern once there are at least 5 days on each side of the comparison, always show the sample size, and are phrased as observations rather than advice.
