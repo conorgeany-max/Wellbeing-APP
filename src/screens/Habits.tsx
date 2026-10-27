@@ -60,9 +60,9 @@ export default function Habits() {
                   <div><p className="headline text-xl">{Math.round(st.consistency * 100)}%</p><p className="text-[11px] text-muted">30 days</p></div>
                 </div>
               </div>
-              <div className="mt-3 flex gap-3 text-sm">
-                <button className="text-muted hover:text-ink" onClick={() => setEditing(h)}>Edit</button>
-                <button className="text-muted hover:text-ink" onClick={() => updateHabit(h.id, { archived: true })}>Archive</button>
+              <div className="-ml-2 mt-2 flex gap-1 text-sm">
+                <button className="px-2 py-2.5 text-muted hover:text-ink" onClick={() => setEditing(h)}>Edit</button>
+                <button className="px-2 py-2.5 text-muted hover:text-ink" onClick={() => updateHabit(h.id, { archived: true })}>Archive</button>
               </div>
             </li>
           );

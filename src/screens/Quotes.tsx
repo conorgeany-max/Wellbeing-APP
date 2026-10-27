@@ -65,7 +65,7 @@ export default function Quotes() {
 
 function Heart({ q }: { q: Quote }) {
   return (
-    <button onClick={() => toggleFavourite(q)} className={`text-xl transition ${q.favourite ? 'text-pop' : 'text-line hover:text-muted'}`} aria-label={q.favourite ? 'Remove from favourites' : 'Add to favourites'} aria-pressed={q.favourite}>
+    <button onClick={() => toggleFavourite(q)} className={`-m-2 flex h-11 w-11 shrink-0 items-center justify-center text-xl transition ${q.favourite ? 'text-pop' : 'text-line hover:text-muted'}`} aria-label={q.favourite ? 'Remove from favourites' : 'Add to favourites'} aria-pressed={q.favourite}>
       {q.favourite ? '♥' : '♡'}
     </button>
   );

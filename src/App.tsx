@@ -27,7 +27,7 @@ function Shell() {
     window.scrollTo(0, 0);
   }, [pathname]);
   return (
-    <div className="min-h-screen">
+    <div className="px-safe min-h-screen">
       {!immersive && <TopNav />}
       <div className="min-w-0">
         <Suspense fallback={null}>

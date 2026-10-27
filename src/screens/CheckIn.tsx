@@ -225,14 +225,14 @@ export default function CheckIn() {
 
 function Shell({ children, onClose, step }: { children: ReactNode; onClose: () => void; step?: number }) {
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col overflow-x-hidden px-4 pt-5 sm:px-6">
+    <div className="mx-auto flex min-h-[100dvh] w-full max-w-xl flex-col overflow-x-hidden px-4 pt-5 sm:px-6">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex gap-1.5" aria-label="Progress">
           {step !== undefined && STEPS.map((s, i) => (
             <span key={s} className={`h-1.5 rounded-full transition-all ${i === step ? 'w-8 bg-accent' : i < step ? 'w-4 bg-accent/50' : 'w-4 bg-line'}`} />
           ))}
         </div>
-        <button type="button" onClick={onClose} className="btn-ghost px-3 py-2 text-muted" aria-label="Close check-in">✕</button>
+        <button type="button" onClick={onClose} className="btn-ghost -mr-2 h-11 w-11 px-0 py-0 text-muted" aria-label="Close check-in">✕</button>
       </div>
       {children}
     </div>

@@ -4,6 +4,8 @@ const token = (name) => `rgb(var(--${name}) / <alpha-value>)`;
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   darkMode: 'class',
+  // Hover styles only apply on devices with a real pointer, so taps on phones and iPads don't stick.
+  future: { hoverOnlyWhenSupported: true },
   theme: {
     extend: {
       colors: {

@@ -112,6 +112,7 @@ export default function Report() {
 
   return (
     <Page
+      wide
       eyebrow="Monthly reflection"
       title={label}
       action={

@@ -53,10 +53,10 @@ export default function Today() {
         <header className="relative flex flex-col items-center gap-5 py-6 text-center md:py-14">
           {/* Stickers float around the hero; fewer and smaller on phones */}
           <div className="pointer-events-none absolute inset-0 -z-0" aria-hidden>
-            <Sticker look="pink" tilt={-8} className="absolute -left-2 -top-2 text-sm sm:-left-36 sm:top-0 sm:text-lg">One day<br />at a time</Sticker>
-            <Sticker look="green" tilt={7} delay={1.5} className="absolute -right-1 top-0 text-sm sm:-right-36 sm:top-8 sm:text-lg">Be kind<br />to you</Sticker>
-            <SpinBadge text="BREATHE IN · BREATHE OUT · BREATHE IN · BREATHE OUT ·" center="☺" className="absolute -bottom-6 -right-40 hidden sm:inline-flex" />
-            <Sticker look="orange" tilt={-5} delay={3} className="absolute bottom-2 -left-32 hidden sm:inline-block">Little<br />wins</Sticker>
+            <Sticker look="pink" tilt={-8} className="absolute -left-2 -top-2 text-sm sm:text-base lg:-left-36 lg:top-0 lg:text-lg">One day<br />at a time</Sticker>
+            <Sticker look="green" tilt={7} delay={1.5} className="absolute -right-1 top-0 text-sm sm:text-base lg:-right-36 lg:top-8 lg:text-lg">Be kind<br />to you</Sticker>
+            <SpinBadge text="BREATHE IN · BREATHE OUT · BREATHE IN · BREATHE OUT ·" center="☺" className="absolute -bottom-6 -right-40 hidden lg:inline-flex" />
+            <Sticker look="orange" tilt={-5} delay={3} className="absolute bottom-2 -left-32 hidden lg:inline-block">Little<br />wins</Sticker>
           </div>
           <p className="lead relative">{formatLong(date)}</p>
           <MixedTitle className="relative text-[3.25rem] sm:text-7xl">{hello}</MixedTitle>
