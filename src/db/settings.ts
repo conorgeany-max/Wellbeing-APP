@@ -1,5 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from './db';
+import type { Experiment } from '../lib/experiments';
 
 export type ThemeMode = 'system' | 'light' | 'dark';
 
@@ -15,6 +16,7 @@ export interface Settings {
   sampleData: boolean;
   strengthOfWeek: StrengthOfWeek | null;
   name: string;
+  experiments: Experiment[]; // 7-day tries started from Insights, newest first
   seeded: boolean;
   // Cloud features (only on the hosted app)
   accessCode: string;
@@ -24,7 +26,7 @@ export interface Settings {
 }
 
 /** Settings that follow you between devices. Everything else stays on this device. */
-export const SYNCED_SETTINGS: (keyof Settings)[] = ['name', 'country', 'strengthOfWeek'];
+export const SYNCED_SETTINGS: (keyof Settings)[] = ['name', 'country', 'strengthOfWeek', 'experiments'];
 
 export const DEFAULT_SETTINGS: Settings = {
   theme: 'system',
@@ -33,6 +35,7 @@ export const DEFAULT_SETTINGS: Settings = {
   sampleData: true,
   strengthOfWeek: null,
   name: '',
+  experiments: [],
   seeded: false,
   accessCode: '',
   useClaude: false,

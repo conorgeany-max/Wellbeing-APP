@@ -12,6 +12,9 @@ import { MIN_SAMPLE, fmt1, plural } from '../lib/stats';
 import { useChartTheme } from '../lib/chartTheme';
 import { Card, Chip, Empty, Eyebrow, Page, SectionTitle, Stat } from '../components/ui';
 import { MoodDot } from '../components/MoodFace';
+import { ExperimentCard, TryButton } from '../components/ExperimentCard';
+import { activeExperiment, type Experiment } from '../lib/experiments';
+import type { Entry } from '../db/types';
 
 const RANGES = [7, 30, 90] as const;
 
@@ -20,6 +23,8 @@ export default function Insights() {
   const habits = useHabits();
   const logs = useHabitLogs();
   const strengths = useStrengths();
+  const settings = useSettings();
+  const experiment = activeExperiment(settings.experiments);
   const [range, setRange] = useState<(typeof RANGES)[number]>(30);
   const theme = useChartTheme();
   const data = useMemo(() => computeInsights(entries, habits, logs, strengths, range), [entries, habits, logs, strengths, range]);
@@ -43,6 +48,8 @@ export default function Insights() {
         Based on {plural(data.entryCount, 'check-in')}. Patterns only appear once there are at least {MIN_SAMPLE} days to compare, and they are observations, not advice.
       </p>
       <div className="space-y-6">
+        {experiment && <ExperimentCard x={experiment} entries={entries} logs={logs} />}
+
         {/* Weekly summary */}
         <Card tint>
           <Eyebrow>This week</Eyebrow>
@@ -79,7 +86,7 @@ export default function Insights() {
 
         {/* What works / what doesn't */}
         <div className="grid gap-6 md:grid-cols-2">
-          <FindingList title="What seems to help" eyebrow="Linked with higher mood" items={data.works} tone="good" empty="Nothing clear yet. Keep checking in and ticking habits." />
+          <FindingList title="What seems to help" eyebrow="Linked with higher mood" items={data.works} tone="good" empty="Nothing clear yet. Keep checking in and ticking habits." tryWith={{ entries, active: experiment }} />
           <FindingList title="What seems to weigh on you" eyebrow="Linked with lower mood" items={data.doesnt} tone="low" empty="No clear drags on your mood so far." />
         </div>
 
@@ -195,7 +202,10 @@ function sleepSentence(s: { r: number; shortAvg: number; longAvg: number; nShort
   return `Need at least ${MIN_SAMPLE} nights on each side of 7 hours to compare.`;
 }
 
-function FindingList({ title, eyebrow, items, tone, empty }: { title: string; eyebrow: string; items: Finding[]; tone: 'good' | 'low'; empty: string }) {
+function FindingList({ title, eyebrow, items, tone, empty, tryWith }: {
+  title: string; eyebrow: string; items: Finding[]; tone: 'good' | 'low'; empty: string;
+  tryWith?: { entries: Entry[]; active?: Experiment }; // offer a 7-day experiment for each finding
+}) {
   return (
     <Card>
       <SectionTitle eyebrow={eyebrow} title={title} />
@@ -211,6 +221,7 @@ function FindingList({ title, eyebrow, items, tone, empty }: { title: string; ey
               <span>
                 <span className="font-medium">{f.icon ? `${f.icon} ` : ''}{f.label}</span>
                 <span className="block text-muted">{f.sentence}</span>
+                {tryWith && <TryButton f={f} entries={tryWith.entries} active={tryWith.active} />}
               </span>
             </li>
           ))}
