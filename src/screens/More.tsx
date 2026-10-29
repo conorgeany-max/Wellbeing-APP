@@ -3,7 +3,7 @@ import { Page } from '../components/ui';
 import { SupportLink } from '../components/Support';
 
 const LINKS = [
-  { to: '/strengths', icon: '✦', title: 'Strengths', sub: 'Your VIA profile and strength of the week' },
+  { to: '/strengths', icon: '✦', title: 'Strengths', sub: 'Your VIA profile, for reference' },
   { to: '/report', icon: '☾', title: 'Monthly reflection', sub: 'Your month in review' },
   { to: '/quotes', icon: '❝', title: 'Quotes', sub: 'Quote of the day, favourites and your own' },
   { to: '/settings', icon: '⚙', title: 'Settings', sub: 'Theme, reminders, data and support' },

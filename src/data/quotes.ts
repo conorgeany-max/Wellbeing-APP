@@ -1,5 +1,5 @@
 // Built-in quotes: inspirational, stoic and mindfulness. Some are tagged with
-// a strength id so the quote of the day can match the Strength of the week.
+// a strength id so the quote of the day can match today's strength.
 
 export interface QuoteSeed {
   text: string;

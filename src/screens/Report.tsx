@@ -215,7 +215,7 @@ export default function Report() {
               ))}
             </div>
             {signatureUnused.length > 0 && (
-              <p className="mt-3 text-sm text-muted">Not logged this month: {signatureUnused.map((s) => s.name).join(', ')}. Maybe one for next month’s strength of the week.</p>
+              <p className="mt-3 text-sm text-muted">Not logged this month: {signatureUnused.map((s) => s.name).join(', ')}. They’ll come round in your daily prompt on Today.</p>
             )}
           </Card>
 

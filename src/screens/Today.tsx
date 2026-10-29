@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { setHabitDone, useEntries, useEntry, useHabitLogs, useHabits, useQuotes, useStrengths } from '../db/repo';
 import { useSettings } from '../db/settings';
-import { activeStrengthOfWeek, dailyChallenge, quoteOfDay } from '../lib/daily';
+import { dailyChallenge, quoteOfDay, strengthOfDay } from '../lib/daily';
 import { addDays, daysBetween, formatLong, greeting, today } from '../lib/date';
 import { Eyebrow, MixedTitle } from '../components/ui';
 import { Logo } from '../components/Nav';
@@ -32,9 +32,8 @@ export default function Today() {
   const quotes = useQuotes();
   const strengths = useStrengths();
 
-  const focusId = activeStrengthOfWeek(settings.strengthOfWeek, date);
-  const focus = strengths.find((s) => s.id === focusId);
-  const quote = quoteOfDay(quotes, date, focusId);
+  const focus = strengthOfDay(strengths, date);
+  const quote = quoteOfDay(quotes, date, focus?.id ?? null);
   const doneToday = new Set(logs.filter((l) => l.date === date).map((l) => l.habitId));
   const habitsDone = habits.filter((h) => doneToday.has(h.id)).length;
   const dates = new Set(entries.map((e) => e.date));
@@ -73,6 +72,14 @@ export default function Today() {
 
         {entry && <TodaySoFar entry={entry} habits={habits} doneToday={doneToday} streak={streak} />}
 
+        {focus && (
+          <section className="card-tint p-5">
+            <Eyebrow>Try today · {focus.name}</Eyebrow>
+            <p className="headline mt-2 text-2xl leading-tight">{dailyChallenge(focus, date)}</p>
+            <p className="mt-2 text-sm text-muted">Only if it fits your day. A new one tomorrow.</p>
+          </section>
+        )}
+
         {memory && <MemoryCard memory={memory} />}
 
         {experiment && <ExperimentCard x={experiment} entries={entries} logs={logs} />}
@@ -99,13 +106,6 @@ export default function Today() {
               <p className="font-serif text-lg leading-tight">{streak ? 'Nice and steady.' : 'Today is a good day to start.'}</p>
             </div>
           </div>
-        )}
-
-        {focus && (
-          <Link to="/strengths" className="card-tint p-5 transition hover:-translate-y-0.5">
-            <Eyebrow>Strength of the week · {focus.name}</Eyebrow>
-            <p className="headline mt-2 text-2xl leading-tight">{dailyChallenge(focus, date)}</p>
-          </Link>
         )}
       </motion.main>
     </div>

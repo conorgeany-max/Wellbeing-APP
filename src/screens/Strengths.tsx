@@ -1,21 +1,16 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useEntries, useStrengths } from '../db/repo';
-import { setSetting, useSettings } from '../db/settings';
 import type { Strength } from '../db/types';
-import { activeStrengthOfWeek, dailyChallenge } from '../lib/daily';
-import { lastNDays, today, weekStart } from '../lib/date';
+import { lastNDays, today } from '../lib/date';
 import { MIN_SAMPLE, fmt1, mean, plural } from '../lib/stats';
 import { Card, Eyebrow, Page, SectionTitle } from '../components/ui';
 
 export default function Strengths() {
   const strengths = useStrengths();
   const entries = useEntries();
-  const settings = useSettings();
   const [open, setOpen] = useState<string | null>(null);
   const date = today();
-  const focusId = activeStrengthOfWeek(settings.strengthOfWeek, date);
-  const focus = strengths.find((s) => s.id === focusId);
 
   const stats = useMemo(() => {
     const last30 = new Set(lastNDays(30, date));
@@ -27,8 +22,6 @@ export default function Strengths() {
     return m;
   }, [entries, strengths, date]);
 
-  const pickFocus = (id: string) => setSetting('strengthOfWeek', { strengthId: id, weekStart: weekStart(date) });
-
   const groups: [string, string, Strength[]][] = [
     ['Signature strengths', 'Your top five: the most natural, energising parts of you.', strengths.slice(0, 5)],
     ['Middle strengths', 'Available when you need them.', strengths.slice(5, 19)],
@@ -37,24 +30,6 @@ export default function Strengths() {
 
   return (
     <Page eyebrow="VIA Character Strengths" title="Your strengths">
-      <Card tint className="mb-8">
-        <Eyebrow>Strength of the week</Eyebrow>
-        {focus ? (
-          <>
-            <p className="headline mt-1 text-2xl">{focus.name}</p>
-            <p className="mt-2"><span className="text-muted">Today's tiny challenge:</span> {dailyChallenge(focus, date)}</p>
-            <button className="link mt-3 text-sm" onClick={() => setSetting('strengthOfWeek', null)}>Choose another</button>
-          </>
-        ) : (
-          <>
-            <p className="mt-1 text-muted">Pick one strength to focus on this week. You'll get a tiny daily challenge and matching quotes.</p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {strengths.slice(0, 8).map((s) => <button key={s.id} className="chip hover:bg-card" onClick={() => pickFocus(s.id)}>{s.name}</button>)}
-            </div>
-          </>
-        )}
-      </Card>
-
       <SectionTitle eyebrow="Top 5" title="Signature strengths" />
       <div className="mb-10 grid gap-4 sm:grid-cols-2">
         {strengths.slice(0, 5).map((s) => {
@@ -78,7 +53,6 @@ export default function Strengths() {
                   )}
                 </div>
               </div>
-              {focusId !== s.id && <button className="mt-1 self-start py-2.5 text-xs" onClick={() => pickFocus(s.id)}><span className="link">Make this my strength of the week</span></button>}
             </Card>
           );
         })}
