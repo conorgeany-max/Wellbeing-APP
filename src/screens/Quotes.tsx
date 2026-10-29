@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { addQuote, deleteQuote, toggleFavourite, useQuotes, useStrengths } from '../db/repo';
-import { useSettings } from '../db/settings';
 import type { Quote } from '../db/types';
-import { activeStrengthOfWeek, quoteOfDay } from '../lib/daily';
+import { quoteOfDay, strengthOfDay } from '../lib/daily';
 import { today } from '../lib/date';
 import { Chip, Empty, Eyebrow, Modal, Page } from '../components/ui';
 
@@ -11,10 +10,9 @@ type Filter = 'all' | 'favourites' | 'mine';
 export default function Quotes() {
   const quotes = useQuotes();
   const strengths = useStrengths();
-  const settings = useSettings();
   const [filter, setFilter] = useState<Filter>('all');
   const [adding, setAdding] = useState(false);
-  const qod = quoteOfDay(quotes, today(), activeStrengthOfWeek(settings.strengthOfWeek, today()));
+  const qod = quoteOfDay(quotes, today(), strengthOfDay(strengths, today())?.id ?? null);
   const strengthName = (id?: string) => strengths.find((s) => s.id === id)?.name;
 
   const list = quotes

@@ -4,10 +4,9 @@ const ITEMS = [
   { to: '/', label: 'Today', icon: '◐', end: true },
   { to: '/journal', label: 'Journal', icon: '✎' },
   { to: '/habits', label: 'Habits', icon: '◎' },
-  { to: '/strengths', label: 'Strengths', icon: '✦', desktopOnly: true },
   { to: '/quotes', label: 'Quotes', icon: '❝', desktopOnly: true },
   { to: '/insights', label: 'Insights', icon: '↗' },
-  { to: '/more', label: 'More', icon: '⋯', mobileOnly: true },
+  { to: '/more', label: 'More', icon: '⋯' },
 ];
 
 export function Logo({ className = '' }: { className?: string }) {
@@ -20,7 +19,7 @@ export function TopNav() {
     <header className="sticky top-0 z-40 hidden items-start justify-between px-6 pt-4 md:flex">
       <NavLink to="/" aria-label="Steady home" className="-rotate-6 transition hover:rotate-0"><Logo className="text-4xl" /></NavLink>
       <nav className="flex gap-1 bg-card px-2.5 lg:gap-2">
-        {ITEMS.filter((i) => !i.mobileOnly).map((i) => (
+        {ITEMS.map((i) => (
           <NavLink
             key={i.to}
             to={i.to}

@@ -1,6 +1,5 @@
 import type { ISODate, Quote, Strength } from '../db/types';
-import type { StrengthOfWeek } from '../db/settings';
-import { dayOfYear, fromISO, weekStart } from './date';
+import { dayOfYear, fromISO } from './date';
 
 const hash = (s: string) => {
   let h = 2166136261;
@@ -8,14 +7,15 @@ const hash = (s: string) => {
   return h >>> 0;
 };
 
-/** The strength of the week only counts during the week it was picked. */
-export function activeStrengthOfWeek(sow: StrengthOfWeek | null, date: ISODate): string | null {
-  return sow && sow.weekStart === weekStart(date) ? sow.strengthId : null;
+/** Today's strength: rotates through the signature strengths, one a day, nothing to pick. */
+export function strengthOfDay(strengths: Strength[], date: ISODate): Strength | undefined {
+  const top = strengths.slice(0, 5);
+  return top.length ? top[dayOfYear(date) % top.length] : undefined;
 }
 
 /**
- * Quote of the day: stable for a date. Every other day it leans on the
- * Strength of the week when one is set.
+ * Quote of the day: stable for a date. Every other day it leans on
+ * today's strength.
  */
 export function quoteOfDay(quotes: Quote[], date: ISODate, focus: string | null): Quote | undefined {
   if (!quotes.length) return undefined;
@@ -27,11 +27,10 @@ export function quoteOfDay(quotes: Quote[], date: ISODate, focus: string | null)
   return sorted[hash(date) % sorted.length];
 }
 
-/** Journal prompt for the Clear step, rotating through signature strengths. */
+/** Journal prompt for the Clear step, from today's strength. */
 export function journalPrompt(strengths: Strength[], date: ISODate): { prompt: string; strength?: Strength } {
-  const top = strengths.slice(0, 5);
-  if (!top.length) return { prompt: 'What is on your mind?' };
-  const s = top[dayOfYear(date) % top.length];
+  const s = strengthOfDay(strengths, date);
+  if (!s) return { prompt: 'What is on your mind?' };
   return { prompt: s.prompt, strength: s };
 }
 
