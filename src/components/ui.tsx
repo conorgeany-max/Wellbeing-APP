@@ -62,13 +62,13 @@ export function Chip({ on, onClick, children, title }: { on?: boolean; onClick?:
 }
 
 export function Empty({ children }: { children: ReactNode }) {
-  return <p className="rounded-card border-2 border-dashed border-line p-6 text-center text-sm text-muted">{children}</p>;
+  return <p className="rounded-card border-[1.5px] border-dashed border-line p-6 text-center text-sm text-muted">{children}</p>;
 }
 
 export function Modal({ open, onClose, children, title }: { open: boolean; onClose: () => void; children: ReactNode; title: string }) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 backdrop-blur-sm sm:items-center sm:p-6" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40 p-0 backdrop-blur-sm sm:items-center sm:p-6" onClick={onClose}>
       <motion.div
         role="dialog"
         aria-label={title}

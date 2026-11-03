@@ -14,7 +14,7 @@ export function Heatmap({ done, weeks = 12, color = 'rgb(var(--accent))' }: { do
             <span
               key={d}
               title={`${formatShort(d)}${done.has(d) ? ': done' : ''}`}
-              className="h-3 w-3 rounded-[3px]"
+              className="h-3 w-3 rounded-[4px]"
               style={{ background: d > end ? 'transparent' : done.has(d) ? color : 'rgb(var(--line) / 0.7)' }}
             />
           ))}

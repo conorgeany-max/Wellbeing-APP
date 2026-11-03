@@ -17,8 +17,8 @@ export function Logo({ className = '' }: { className?: string }) {
 export function TopNav() {
   return (
     <header className="sticky top-0 z-40 hidden items-start justify-between px-6 pt-4 md:flex">
-      <NavLink to="/" aria-label="Steady home" className="-rotate-6 transition hover:rotate-0"><Logo className="text-4xl" /></NavLink>
-      <nav className="flex gap-1 bg-card px-2.5 lg:gap-2">
+      <NavLink to="/" aria-label="Steady home" className="transition hover:opacity-80"><Logo className="text-4xl" /></NavLink>
+      <nav className="flex gap-1 rounded-full bg-card px-3 shadow-soft lg:gap-2">
         {ITEMS.map((i) => (
           <NavLink
             key={i.to}
@@ -30,7 +30,7 @@ export function TopNav() {
           </NavLink>
         ))}
       </nav>
-      <NavLink to="/settings" className="eyebrow flex items-center gap-2 bg-card px-4 py-3 text-[12px] !text-ink">
+      <NavLink to="/settings" className="eyebrow flex items-center gap-2 rounded-full bg-card px-4 py-3 text-[12px] !text-ink shadow-soft">
         {({ isActive }) => (
           <>
             <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
@@ -44,7 +44,7 @@ export function TopNav() {
 
 export function BottomNav() {
   return (
-    <nav className="pb-safe px-safe fixed inset-x-0 bottom-0 z-40 flex justify-around bg-card pt-1 md:hidden">
+    <nav className="pb-safe px-safe fixed inset-x-0 bottom-0 z-40 flex justify-around rounded-t-[1.75rem] bg-card pt-1.5 shadow-[0_-8px_24px_-16px_rgb(34_29_58/0.25)] md:hidden">
       {ITEMS.filter((i) => !i.desktopOnly).map((i) => (
         <NavLink
           key={i.to}

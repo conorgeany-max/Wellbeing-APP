@@ -9,9 +9,9 @@ export function MoodFace({ mood, size = 48 }: { mood: number; size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 48 48" aria-hidden>
       <circle cx="24" cy="24" r="22" fill={moodColor(mood)} opacity="0.9" />
-      <circle cx="17" cy="20" r="2.2" fill="#111111" opacity="0.75" />
-      <circle cx="31" cy="20" r="2.2" fill="#111111" opacity="0.75" />
-      <path d={`M15 ${31 - curve / 2} Q24 ${31 + curve} 33 ${31 - curve / 2}`} stroke="#111111" strokeOpacity="0.75" strokeWidth="2.4" fill="none" strokeLinecap="round" />
+      <circle cx="17" cy="20" r="2.2" fill="#221D3A" opacity="0.75" />
+      <circle cx="31" cy="20" r="2.2" fill="#221D3A" opacity="0.75" />
+      <path d={`M15 ${31 - curve / 2} Q24 ${31 + curve} 33 ${31 - curve / 2}`} stroke="#221D3A" strokeOpacity="0.75" strokeWidth="2.4" fill="none" strokeLinecap="round" />
     </svg>
   );
 }

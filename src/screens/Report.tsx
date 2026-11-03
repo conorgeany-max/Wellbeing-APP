@@ -164,7 +164,7 @@ export default function Report() {
                     onClick={(ev) => !e && ev.preventDefault()}
                     title={e ? `${d}: mood ${e.mood}` : d}
                     className="flex aspect-square items-center justify-center rounded-lg text-xs"
-                    style={{ background: e ? moodColor(e.mood) : 'rgb(var(--line) / 0.5)', color: e ? '#111111' : undefined }}
+                    style={{ background: e ? moodColor(e.mood) : 'rgb(var(--line) / 0.5)', color: e ? '#221D3A' : undefined }}
                   >
                     {fromISO(d).getDate()}
                   </Link>
