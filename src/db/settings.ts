@@ -8,10 +8,10 @@ export interface Settings {
   theme: ThemeMode;
   reminderTime: string | null; // 'HH:MM'
   country: string;
-  sampleData: boolean;
   name: string;
   experiments: Experiment[]; // 7-day tries started from Insights, newest first
   seeded: boolean;
+  exampleContentRemoved: boolean; // one-time cleanup of the old demo data and starter habits
   // Cloud features (only on the hosted app)
   accessCode: string;
   useClaude: boolean;
@@ -26,10 +26,10 @@ export const DEFAULT_SETTINGS: Settings = {
   theme: 'system',
   reminderTime: null,
   country: 'UK',
-  sampleData: true,
   name: '',
   experiments: [],
   seeded: false,
+  exampleContentRemoved: false,
   accessCode: '',
   useClaude: false,
   lastSync: null,

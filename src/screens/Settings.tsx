@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { deleteAllData, exportAll, importAll, resetStrengthOrder, saveStrengthOrder, useStrengths, type ExportFile } from '../db/repo';
 import { setSetting, useSettings, type ThemeMode } from '../db/settings';
-import { addSampleData, removeSampleData } from '../db/seed';
 import { SUPPORT } from '../data/support';
 import { today } from '../lib/date';
 import { Chip, Eyebrow, Page } from '../components/ui';
@@ -35,12 +34,6 @@ export default function Settings() {
     if (time && typeof Notification !== 'undefined' && Notification.permission === 'default') await Notification.requestPermission();
     await setSetting('reminderTime', time || null);
     if (time && s.pushEnabled) await updatePushTime(time).catch(() => flash('Saved here, but could not update the reminder server.'));
-  };
-
-  const toggleSample = async (on: boolean) => {
-    await setSetting('sampleData', on);
-    if (on) await addSampleData(); else await removeSampleData();
-    flash(on ? 'Sample data added.' : 'Sample data removed.');
   };
 
   const doExport = async () => {
@@ -128,9 +121,6 @@ export default function Settings() {
         </Group>
 
         <Group title="Your data" hint={s.accessCode ? 'Stored on this device and backed up to your own Netlify account.' : 'Everything stays on this device. Nothing is sent anywhere.'}>
-          <Row label="Sample data" hint="30 days of example entries so Insights has something to show. Sample entries never sync.">
-            <Toggle on={s.sampleData} onChange={toggleSample} />
-          </Row>
           <div className="flex flex-wrap gap-2 pt-2">
             <button className="btn-outline" onClick={doExport}>Export JSON</button>
             <button className="btn-outline" onClick={() => fileRef.current?.click()}>Import JSON</button>
@@ -164,13 +154,5 @@ function Row({ label, hint, children }: { label: string; hint?: string; children
       </div>
       {children}
     </div>
-  );
-}
-
-function Toggle({ on, onChange }: { on: boolean; onChange: (v: boolean) => void }) {
-  return (
-    <button role="switch" aria-checked={on} onClick={() => onChange(!on)} className={`relative h-7 w-12 rounded-full transition ${on ? 'bg-accent' : 'bg-line'}`}>
-      <span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all ${on ? 'left-6' : 'left-1'}`} />
-    </button>
   );
 }

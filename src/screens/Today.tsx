@@ -95,10 +95,21 @@ export default function Today() {
         {!entry && (
           <div className="grid grid-cols-2 gap-4">
             <Link to="/habits" className="card flex flex-col items-center gap-3 p-5 text-center transition hover:-translate-y-0.5">
-              <ProgressRing value={habits.length ? habitsDone / habits.length : 0}>
-                <span className="headline text-3xl">{habitsDone}/{habits.length}</span>
-              </ProgressRing>
-              <Eyebrow>Habits today</Eyebrow>
+              {habits.length ? (
+                <>
+                  <ProgressRing value={habitsDone / habits.length}>
+                    <span className="headline text-3xl">{habitsDone}/{habits.length}</span>
+                  </ProgressRing>
+                  <Eyebrow>Habits today</Eyebrow>
+                </>
+              ) : (
+                <>
+                  <ProgressRing value={0}>
+                    <span className="headline text-3xl">+</span>
+                  </ProgressRing>
+                  <Eyebrow>Add your first habit</Eyebrow>
+                </>
+              )}
             </Link>
             <div className="card flex flex-col items-center justify-center gap-1 p-5 text-center">
               <p className="display text-7xl text-accent">{streak}</p>

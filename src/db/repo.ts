@@ -3,7 +3,7 @@ import { db } from './db';
 import type { Entry, Habit, HabitFrequency, HabitLog, Quote, Strength } from './types';
 import { uid } from '../lib/id';
 import { STRENGTHS } from '../data/strengths';
-import { ensureSeeded, removeSampleData } from './seed';
+import { ensureSeeded } from './seed';
 
 // ---------- Live queries (React hooks) ----------
 // Stable empty defaults: a fresh [] each render would retrigger effects that depend on these.
@@ -161,12 +161,10 @@ export async function importAll(data: ExportFile) {
   });
 }
 
-/** Wipe everything, then start fresh with starter content but no demo data. */
+/** Wipe everything, then start fresh with just the strengths and quotes. */
 export async function deleteAllData() {
   await db.transaction('rw', [db.entries, db.habits, db.habitLogs, db.quotes, db.strengths, db.settings, db.tombstones], async () => {
     await Promise.all([db.entries.clear(), db.habits.clear(), db.habitLogs.clear(), db.quotes.clear(), db.strengths.clear(), db.settings.clear(), db.tombstones.clear()]);
   });
   await ensureSeeded();
-  await removeSampleData();
-  await db.settings.put({ key: 'sampleData', value: false });
 }

@@ -3,11 +3,13 @@
 import 'fake-indexeddb/auto';
 import { db } from '../src/db/db';
 import { ensureSeeded } from '../src/db/seed';
+import { addSampleData } from './sample-data';
 import { computeInsights } from '../src/lib/insights';
 import { localProvider } from '../src/lib/ask';
 
 const main = async () => {
   await ensureSeeded();
+  await addSampleData();
   const entries = await db.entries.orderBy('date').reverse().toArray();
   const habits = (await db.habits.orderBy('order').toArray()).filter((h) => !h.archived);
   const logs = await db.habitLogs.toArray();

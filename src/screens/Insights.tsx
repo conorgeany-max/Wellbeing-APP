@@ -32,7 +32,7 @@ export default function Insights() {
   if (!data.hasData) {
     return (
       <Page eyebrow="Insights" title="Patterns will appear here">
-        <Empty>Check in for a few days and Steady will start to notice what helps. Or turn on sample data in <Link className="link" to="/settings">Settings</Link> to explore.</Empty>
+        <Empty>Check in for a few days and Steady will start to notice what helps. A week of check-ins is usually enough for the first ones.</Empty>
       </Page>
     );
   }
