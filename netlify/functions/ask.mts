@@ -7,6 +7,7 @@ interface AskBody {
   question?: string;
   entries: unknown[];
   stats?: unknown; // pre-computed numbers for the monthly report
+  guide?: string; // their own guide to happiness, in their words
 }
 
 const ASK_PROMPT = `You help one person reflect on their private well-being journal. Each entry has a date, mood and energy (1-5), sleep hours, free text, a "what went well" reflection, tags and the VIA character strengths they used.
@@ -40,11 +41,15 @@ export default async (req: Request) => {
     return Response.json({ error: 'Missing question or entries.' }, { status: 400 });
   }
 
+  // Their own guide: what they've learned helps them, and what worries them.
+  const guide = body.guide?.trim()
+    ? `Their own guide to happiness, in their words. Where it fits, connect what you see to it, gently and without lecturing:\n${body.guide.trim().slice(0, 4000)}\n\n`
+    : '';
   const client = new Anthropic({ apiKey: Netlify.env.get('ANTHROPIC_API_KEY') });
   const content =
     body.mode === 'report'
-      ? `Stats for the month:\n${JSON.stringify(body.stats)}\n\nCheck-ins:\n${JSON.stringify(body.entries)}`
-      : `Journal entries:\n${JSON.stringify(body.entries)}\n\nQuestion: ${body.question}`;
+      ? `${guide}Stats for the month:\n${JSON.stringify(body.stats)}\n\nCheck-ins:\n${JSON.stringify(body.entries)}`
+      : `${guide}Journal entries:\n${JSON.stringify(body.entries)}\n\nQuestion: ${body.question}`;
 
   try {
     const response = await client.beta.messages.create({

@@ -97,7 +97,7 @@ export default function Report() {
         habits: habitRows.map((r) => `${r.habit.name}: ${Math.round(r.rate * 100)}%`),
         strengthsUsed: data.strengths.usage.filter((u) => u.count30 > 0).map((u) => `${u.strength.name}: ${u.count30} days`),
       };
-      const res = await api<{ summary: string[] }>('ask', { method: 'POST', body: JSON.stringify({ mode: 'report', entries: forClaude(entries, 31), stats }) });
+      const res = await api<{ summary: string[] }>('ask', { method: 'POST', body: JSON.stringify({ mode: 'report', entries: forClaude(entries, 31), stats, guide: settings.guide || undefined }) });
       setWritten(res.summary);
       try { localStorage.setItem(CACHE + month, JSON.stringify(res.summary)); } catch { /* storage unavailable */ }
     } catch (e) {

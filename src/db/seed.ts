@@ -3,6 +3,7 @@ import { getSettings, setSetting } from './settings';
 import { STRENGTHS } from '../data/strengths';
 import { QUOTES } from '../data/quotes';
 import { STARTER_HABITS } from '../data/habits';
+import { STARTER_GUIDE } from '../data/starterGuide';
 
 /**
  * First launch: load the strengths and quotes the app is built around.
@@ -11,6 +12,8 @@ import { STARTER_HABITS } from '../data/habits';
 export async function ensureSeeded() {
   const settings = await getSettings();
   if (!settings.exampleContentRemoved) await removeExampleContent();
+  if (STARTER_GUIDE && !settings.guideSeeded && !settings.guide) await setSetting('guide', STARTER_GUIDE);
+  if (!settings.guideSeeded) await setSetting('guideSeeded', true);
   if (settings.seeded) return;
   // Starter content is identical on every device, so it gets updatedAt 0:
   // any real edit wins over it when syncing, and two fresh devices don't

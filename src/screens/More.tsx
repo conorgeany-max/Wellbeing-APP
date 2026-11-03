@@ -3,6 +3,7 @@ import { Page } from '../components/ui';
 import { SupportLink } from '../components/Support';
 
 const LINKS = [
+  { to: '/guide', icon: '❋', title: 'My guide', sub: 'Your own rules for a good day, in your words' },
   { to: '/strengths', icon: '✦', title: 'Strengths', sub: 'Your VIA profile, for reference' },
   { to: '/report', icon: '☾', title: 'Monthly reflection', sub: 'Your month in review' },
   { to: '/quotes', icon: '❝', title: 'Quotes', sub: 'Quote of the day, favourites and your own' },

@@ -1,3 +1,4 @@
+import { getSettings } from '../db/settings';
 import type { Entry } from '../db/types';
 import { WEEKDAYS, formatShort, fromISO } from './date';
 import { MIN_SAMPLE, fmt1, mean, plural } from './stats';
@@ -108,7 +109,7 @@ export const claudeProvider: AskProvider = {
   async ask(question, entries) {
     const data = await api<{ summary: string[]; matchDates: string[] }>('ask', {
       method: 'POST',
-      body: JSON.stringify({ mode: 'ask', question, entries: forClaude(entries) }),
+      body: JSON.stringify({ mode: 'ask', question, entries: forClaude(entries), guide: (await getSettings()).guide || undefined }),
     });
     const order = new Map(data.matchDates.map((d, i) => [d, i]));
     const matches = entries.filter((e) => order.has(e.date)).sort((a, b) => order.get(a.date)! - order.get(b.date)!);

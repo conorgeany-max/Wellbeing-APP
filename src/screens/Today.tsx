@@ -11,6 +11,7 @@ import { MoodFace, MOOD_LABELS } from '../components/MoodFace';
 import { ExperimentCard } from '../components/ExperimentCard';
 import { pickMemory, snippet, type Memory } from '../lib/memories';
 import { activeExperiment } from '../lib/experiments';
+import { guideOfDay } from '../lib/guide';
 import type { Entry, Habit } from '../db/types';
 
 /** Consecutive check-in days ending today (or yesterday, if today isn't done yet). */
@@ -42,6 +43,7 @@ export default function Today() {
 
   const memory = pickMemory(entries, habits, logs, date);
   const experiment = activeExperiment(settings.experiments);
+  const rule = guideOfDay(settings.guide, date);
 
   const hello = `${away >= 2 ? 'Welcome back' : greeting()}${settings.name ? `, ${settings.name}` : ''}.`;
 
@@ -72,6 +74,16 @@ export default function Today() {
             <p className="headline mt-2 text-2xl leading-tight">{dailyChallenge(focus, date)}</p>
             <p className="mt-2 text-sm text-muted">Only if it fits your day. A new one tomorrow.</p>
           </section>
+        )}
+
+        {rule && (
+          <Link to="/guide" className="card flex items-start gap-4 p-6 transition hover:-translate-y-0.5">
+            <span className="headline text-4xl leading-none text-accent">{rule.item.label || '❋'}</span>
+            <span>
+              <Eyebrow>From {rule.title || 'your guide'}</Eyebrow>
+              <span className="headline mt-1 block text-2xl leading-tight">{rule.item.text}</span>
+            </span>
+          </Link>
         )}
 
         {quote && (
