@@ -13,6 +13,7 @@ import JournalEntry from './screens/JournalEntry';
 import Habits from './screens/Habits';
 import Quotes from './screens/Quotes';
 import Strengths from './screens/Strengths';
+import Guide from './screens/Guide';
 import Settings from './screens/Settings';
 import More from './screens/More';
 
@@ -39,6 +40,7 @@ function Shell() {
             <Route path="/habits" element={<Habits />} />
             <Route path="/quotes" element={<Quotes />} />
             <Route path="/strengths" element={<Strengths />} />
+            <Route path="/guide" element={<Guide />} />
             <Route path="/insights" element={<Insights />} />
             <Route path="/report" element={<Report />} />
             <Route path="/report/:month" element={<Report />} />

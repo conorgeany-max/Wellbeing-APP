@@ -4,20 +4,16 @@ import type { Experiment } from '../lib/experiments';
 
 export type ThemeMode = 'system' | 'light' | 'dark';
 
-export interface StrengthOfWeek {
-  strengthId: string;
-  weekStart: string;
-}
-
 export interface Settings {
   theme: ThemeMode;
   reminderTime: string | null; // 'HH:MM'
   country: string;
-  sampleData: boolean;
-  strengthOfWeek: StrengthOfWeek | null;
   name: string;
   experiments: Experiment[]; // 7-day tries started from Insights, newest first
   seeded: boolean;
+  exampleContentRemoved: boolean;
+  guide: string; // your own guide, word for word (see lib/guide.ts)
+  guideSeeded: boolean; // one-time cleanup of the old demo data and starter habits
   // Cloud features (only on the hosted app)
   accessCode: string;
   useClaude: boolean;
@@ -26,17 +22,18 @@ export interface Settings {
 }
 
 /** Settings that follow you between devices. Everything else stays on this device. */
-export const SYNCED_SETTINGS: (keyof Settings)[] = ['name', 'country', 'strengthOfWeek', 'experiments'];
+export const SYNCED_SETTINGS: (keyof Settings)[] = ['name', 'country', 'experiments', 'guide'];
 
 export const DEFAULT_SETTINGS: Settings = {
   theme: 'system',
   reminderTime: null,
   country: 'UK',
-  sampleData: true,
-  strengthOfWeek: null,
   name: '',
   experiments: [],
   seeded: false,
+  exampleContentRemoved: false,
+  guide: '',
+  guideSeeded: false,
   accessCode: '',
   useClaude: false,
   lastSync: null,

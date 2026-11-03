@@ -32,7 +32,7 @@ export default function Insights() {
   if (!data.hasData) {
     return (
       <Page eyebrow="Insights" title="Patterns will appear here">
-        <Empty>Check in for a few days and Steady will start to notice what helps. Or turn on sample data in <Link className="link" to="/settings">Settings</Link> to explore.</Empty>
+        <Empty>Check in for a few days and Steady will start to notice what helps. A week of check-ins is usually enough for the first ones.</Empty>
       </Page>
     );
   }
@@ -289,7 +289,7 @@ function AskJournal() {
           <div className="card-tint space-y-1 p-4 text-sm">
             {result.summary.map((s, i) => <p key={i}>{s}</p>)}
             {result.terms.length > 1 && <p className="text-xs text-muted">Also matched: {result.terms.slice(1, 8).join(', ')}</p>}
-            <p className="pt-1 text-[11px] uppercase tracking-wider text-muted">{result.source === 'ai' ? 'Answered by Claude' : 'Keyword search on this device'}</p>
+            <p className="pt-1 text-[0.6875rem] uppercase tracking-wider text-muted">{result.source === 'ai' ? 'Answered by Claude' : 'Keyword search on this device'}</p>
           </div>
           <ul className="space-y-2">
             {result.matches.slice(0, 8).map((e) => (

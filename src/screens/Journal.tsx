@@ -60,7 +60,6 @@ export default function Journal() {
                       <div className="flex items-center gap-2">
                         <MoodDot mood={e.mood} />
                         <p className="text-sm font-medium">{formatLong(e.date)}</p>
-                        {e.sample && <span className="ml-auto text-[10px] uppercase tracking-wider text-muted">sample</span>}
                       </div>
                       {(e.text || e.reflection) && <p className="mt-2 line-clamp-2 text-sm text-muted">{e.text || e.reflection}</p>}
                       {(e.tags.length > 0 || e.strengthsUsed.length > 0) && (

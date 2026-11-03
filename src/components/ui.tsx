@@ -27,7 +27,7 @@ export function Page({ eyebrow, title, action, wide = false, children }: { eyebr
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      className={`mx-auto w-full max-w-2xl px-4 pb-28 pt-10 sm:px-6 md:pb-16 md:pt-8 ${wide ? 'lg:max-w-5xl' : ''}`}
+      className={`mx-auto w-full max-w-2xl px-4 pb-28 pt-10 sm:px-6 md:pb-16 md:pt-8 ${wide ? 'lg:max-w-6xl' : 'lg:max-w-3xl'}`}
     >
       <header className="mb-10 flex flex-col items-center gap-4 text-center">
         <p className="lead">{eyebrow}</p>
@@ -62,13 +62,13 @@ export function Chip({ on, onClick, children, title }: { on?: boolean; onClick?:
 }
 
 export function Empty({ children }: { children: ReactNode }) {
-  return <p className="rounded-card border-2 border-dashed border-line p-6 text-center text-sm text-muted">{children}</p>;
+  return <p className="rounded-card border-[1.5px] border-dashed border-line p-6 text-center text-sm text-muted">{children}</p>;
 }
 
 export function Modal({ open, onClose, children, title }: { open: boolean; onClose: () => void; children: ReactNode; title: string }) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 backdrop-blur-sm sm:items-center sm:p-6" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40 p-0 backdrop-blur-sm sm:items-center sm:p-6" onClick={onClose}>
       <motion.div
         role="dialog"
         aria-label={title}

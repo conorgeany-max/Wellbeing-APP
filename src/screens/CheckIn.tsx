@@ -2,8 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion, type PanInfo } from 'framer-motion';
 import { saveEntry, setHabitsForDate, useEntry, useHabitLogs, useHabits, useQuotes, useStrengths } from '../db/repo';
-import { useSettings } from '../db/settings';
-import { activeStrengthOfWeek, journalPrompt, lowMoodAction, quoteOfDay, reflectPrompt } from '../lib/daily';
+import { journalPrompt, lowMoodAction, quoteOfDay, reflectPrompt, strengthOfDay } from '../lib/daily';
 import { today } from '../lib/date';
 import { frequencyLabel } from '../lib/habits';
 import { SUGGESTED_TAGS } from '../data/tags';
@@ -21,7 +20,6 @@ export default function CheckIn() {
   const logs = useHabitLogs();
   const quotes = useQuotes();
   const strengths = useStrengths();
-  const settings = useSettings();
 
   const [step, setStep] = useState(0);
   const [dir, setDir] = useState(1);
@@ -49,8 +47,7 @@ export default function CheckIn() {
     setDone(new Set(savedToday ? savedToday.split(',') : []));
   }, [savedToday]);
 
-  const focusId = activeStrengthOfWeek(settings.strengthOfWeek, date);
-  const quote = quoteOfDay(quotes, date, focusId);
+  const quote = quoteOfDay(quotes, date, strengthOfDay(strengths, date)?.id ?? null);
   const prompt = journalPrompt(strengths, date);
   const low = lowMoodAction(strengths, date);
   const shownStrengths = useMemo(() => (showAll ? strengths : strengths.slice(0, 5)), [showAll, strengths]);

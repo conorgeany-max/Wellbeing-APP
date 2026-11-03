@@ -2,16 +2,16 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { setHabitDone, useEntries, useEntry, useHabitLogs, useHabits, useQuotes, useStrengths } from '../db/repo';
 import { useSettings } from '../db/settings';
-import { activeStrengthOfWeek, dailyChallenge, quoteOfDay } from '../lib/daily';
+import { dailyChallenge, quoteOfDay, strengthOfDay } from '../lib/daily';
 import { addDays, daysBetween, formatLong, greeting, today } from '../lib/date';
-import { Eyebrow, MixedTitle } from '../components/ui';
+import { Eyebrow } from '../components/ui';
 import { Logo } from '../components/Nav';
-import { SpinBadge, Sticker } from '../components/Sticker';
 import { ProgressRing } from '../components/ProgressRing';
 import { MoodFace, MOOD_LABELS } from '../components/MoodFace';
 import { ExperimentCard } from '../components/ExperimentCard';
 import { pickMemory, snippet, type Memory } from '../lib/memories';
 import { activeExperiment } from '../lib/experiments';
+import { guideOfDay } from '../lib/guide';
 import type { Entry, Habit } from '../db/types';
 
 /** Consecutive check-in days ending today (or yesterday, if today isn't done yet). */
@@ -32,9 +32,8 @@ export default function Today() {
   const quotes = useQuotes();
   const strengths = useStrengths();
 
-  const focusId = activeStrengthOfWeek(settings.strengthOfWeek, date);
-  const focus = strengths.find((s) => s.id === focusId);
-  const quote = quoteOfDay(quotes, date, focusId);
+  const focus = strengthOfDay(strengths, date);
+  const quote = quoteOfDay(quotes, date, focus?.id ?? null);
   const doneToday = new Set(logs.filter((l) => l.date === date).map((l) => l.habitId));
   const habitsDone = habits.filter((h) => doneToday.has(h.id)).length;
   const dates = new Set(entries.map((e) => e.date));
@@ -44,6 +43,7 @@ export default function Today() {
 
   const memory = pickMemory(entries, habits, logs, date);
   const experiment = activeExperiment(settings.experiments);
+  const rule = guideOfDay(settings.guide, date);
 
   const hello = `${away >= 2 ? 'Welcome back' : greeting()}${settings.name ? `, ${settings.name}` : ''}.`;
 
@@ -53,62 +53,75 @@ export default function Today() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="mx-auto flex w-full max-w-xl flex-col gap-8 px-4 pb-28 pt-6 sm:px-6 md:pb-16 md:pt-10"
+        className="mx-auto flex w-full max-w-xl flex-col md:max-w-2xl lg:max-w-3xl gap-5 px-4 pb-28 pt-6 sm:px-6 md:pb-16 md:pt-10"
       >
-        <Logo className="-rotate-6 self-start md:hidden" />
+        <Logo className="self-start md:hidden" />
 
-        <header className="relative flex flex-col items-center gap-5 py-6 text-center md:py-14">
-          {/* Stickers float around the hero; fewer and smaller on phones */}
-          <div className="pointer-events-none absolute inset-0 -z-0" aria-hidden>
-            <Sticker look="pink" tilt={-8} className="absolute -left-2 -top-2 text-sm sm:text-base lg:-left-36 lg:top-0 lg:text-lg">One day<br />at a time</Sticker>
-            <Sticker look="green" tilt={7} delay={1.5} className="absolute -right-1 top-0 text-sm sm:text-base lg:-right-36 lg:top-8 lg:text-lg">Be kind<br />to you</Sticker>
-            <SpinBadge text="BREATHE IN · BREATHE OUT · BREATHE IN · BREATHE OUT ·" center="☺" className="absolute -bottom-6 -right-40 hidden lg:inline-flex" />
-            <Sticker look="orange" tilt={-5} delay={3} className="absolute bottom-2 -left-32 hidden lg:inline-block">Little<br />wins</Sticker>
-          </div>
-          <p className="lead relative">{formatLong(date)}</p>
-          <MixedTitle className="relative text-[3.25rem] sm:text-7xl">{hello}</MixedTitle>
-          {away >= 2 && !entry && <p className="lead relative !text-lg text-muted">Good to see you. Pick up wherever feels right.</p>}
-          {!entry && <Link to="/checkin" className="btn-primary btn-arrow relative mt-2 py-3.5 pl-6 pr-3 text-base">Start check-in</Link>}
+        <header className="flex flex-col items-center gap-3 py-8 text-center md:py-12">
+          <p className="text-sm text-muted">{formatLong(date)}</p>
+          <h1 className="headline text-5xl sm:text-6xl lg:text-7xl">{hello}</h1>
+          {away >= 2 && !entry && <p className="text-muted">Good to see you. Pick up wherever feels right.</p>}
+          {!entry && <Link to="/checkin" className="btn-primary btn-arrow mt-4 py-3 pl-6 pr-2.5 text-base">Start check-in</Link>}
         </header>
 
-        {entry && <TodaySoFar entry={entry} habits={habits} doneToday={doneToday} streak={streak} />}
+        {entry
+          ? <TodaySoFar entry={entry} habits={habits} doneToday={doneToday} streak={streak} />
+          : <AtAGlance habitsDone={habitsDone} habitsTotal={habits.length} streak={streak} />}
+
+        {focus && (
+          <section className="card-tint p-6">
+            <Eyebrow className="!text-accent">Try today · {focus.name}</Eyebrow>
+            <p className="headline mt-2 text-2xl leading-tight">{dailyChallenge(focus, date)}</p>
+            <p className="mt-2 text-sm text-muted">Only if it fits your day. A new one tomorrow.</p>
+          </section>
+        )}
+
+        {rule && (
+          <Link to="/guide" className="card flex items-start gap-4 p-6 transition hover:-translate-y-0.5">
+            <span className="headline text-4xl leading-none text-accent">{rule.item.label || '❋'}</span>
+            <span>
+              <Eyebrow>From {rule.title || 'your guide'}</Eyebrow>
+              <span className="headline mt-1 block text-2xl leading-tight">{rule.item.text}</span>
+            </span>
+          </Link>
+        )}
+
+        {quote && (
+          <figure className="px-4 py-6 text-center">
+            <blockquote className="headline text-[1.75rem] leading-[1.15] sm:text-3xl">“{quote.text}”</blockquote>
+            <figcaption className="mt-3 text-sm text-muted">{quote.author}</figcaption>
+          </figure>
+        )}
 
         {memory && <MemoryCard memory={memory} />}
 
         {experiment && <ExperimentCard x={experiment} entries={entries} logs={logs} />}
-
-        {quote && (
-          <figure className={`card text-center ${entry ? 'px-6 py-6' : 'px-6 py-8'}`}>
-            <Eyebrow>Quote of the day</Eyebrow>
-            <blockquote className={`headline mt-4 leading-[1.1] ${entry ? 'text-2xl' : 'text-[1.75rem] sm:text-[2rem]'}`}>“{quote.text}”</blockquote>
-            <figcaption className="mt-4 text-sm font-semibold"><span className="squiggle">{quote.author}</span></figcaption>
-          </figure>
-        )}
-
-        {!entry && (
-          <div className="grid grid-cols-2 gap-4">
-            <Link to="/habits" className="card flex flex-col items-center gap-3 p-5 text-center transition hover:-translate-y-0.5">
-              <ProgressRing value={habits.length ? habitsDone / habits.length : 0}>
-                <span className="headline text-3xl">{habitsDone}/{habits.length}</span>
-              </ProgressRing>
-              <Eyebrow>Habits today</Eyebrow>
-            </Link>
-            <div className="card flex flex-col items-center justify-center gap-1 p-5 text-center">
-              <p className="display text-7xl text-accent">{streak}</p>
-              <Eyebrow>{streak === 1 ? 'Day' : 'Days'} in a row</Eyebrow>
-              <p className="font-serif text-lg leading-tight">{streak ? 'Nice and steady.' : 'Today is a good day to start.'}</p>
-            </div>
-          </div>
-        )}
-
-        {focus && (
-          <Link to="/strengths" className="card-tint p-5 transition hover:-translate-y-0.5">
-            <Eyebrow>Strength of the week · {focus.name}</Eyebrow>
-            <p className="headline mt-2 text-2xl leading-tight">{dailyChallenge(focus, date)}</p>
-          </Link>
-        )}
       </motion.main>
     </div>
+  );
+}
+
+/** Before checking in: habits and streak side by side in one quiet card. */
+function AtAGlance({ habitsDone, habitsTotal, streak }: { habitsDone: number; habitsTotal: number; streak: number }) {
+  return (
+    <section className="card grid grid-cols-2 divide-x divide-line">
+      <Link to="/habits" className="flex flex-col items-center gap-3 rounded-l-card p-5 text-center transition hover:bg-tint/60 sm:flex-row sm:gap-4 sm:text-left">
+        <ProgressRing value={habitsTotal ? habitsDone / habitsTotal : 0} size={56} stroke={6}>
+          <span className="text-sm font-semibold">{habitsTotal ? `${habitsDone}/${habitsTotal}` : '+'}</span>
+        </ProgressRing>
+        <div>
+          <p className="font-semibold">{habitsTotal ? 'Habits' : 'Add a habit'}</p>
+          <p className="text-sm text-muted">{habitsTotal ? (habitsDone === habitsTotal ? 'All done' : 'today') : 'Start small'}</p>
+        </div>
+      </Link>
+      <div className="flex flex-col items-center gap-3 p-5 text-center sm:flex-row sm:gap-4 sm:text-left">
+        <p className="headline flex h-14 items-center text-5xl text-accent">{streak}</p>
+        <div>
+          <p className="font-semibold">{streak === 1 ? 'Day' : 'Days'} in a row</p>
+          <p className="text-sm text-muted">{streak ? 'Nice and steady' : 'Start today'}</p>
+        </div>
+      </div>
+    </section>
   );
 }
 

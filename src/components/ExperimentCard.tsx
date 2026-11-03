@@ -65,7 +65,7 @@ function Dots({ marks }: { marks: { date: string; state: 'done' | 'missed' | 'fu
         <li
           key={m.date}
           title={`${formatShort(m.date)}: ${m.state === 'done' ? 'done' : m.state === 'missed' ? 'not done' : 'to come'}`}
-          className={`h-3.5 flex-1 rounded-full ${m.state === 'done' ? 'bg-accent' : m.state === 'missed' ? 'border-2 border-line' : 'bg-line/50'}`}
+          className={`h-3.5 flex-1 rounded-full ${m.state === 'done' ? 'bg-accent' : m.state === 'missed' ? 'border-[1.5px] border-line' : 'bg-line/50'}`}
         />
       ))}
     </ol>

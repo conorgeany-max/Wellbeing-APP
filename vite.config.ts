@@ -17,8 +17,8 @@ export default defineConfig({
         name: 'Steady',
         short_name: 'Steady',
         description: 'A calm daily check-in, journal and habit tracker.',
-        theme_color: '#3300FF',
-        background_color: '#F3F3F3',
+        theme_color: '#5B4CDB',
+        background_color: '#F5F1EA',
         display: 'standalone',
         start_url: '.',
         icons: [

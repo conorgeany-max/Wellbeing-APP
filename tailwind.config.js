@@ -23,10 +23,12 @@ export default {
         serif: ['"Instrument Serif"', 'Georgia', 'serif'],
         script: ['Yellowtail', 'cursive'],
       },
-      // Flat, near-square boxes throughout; rounded-full stays for pills, dots and rings.
-      borderRadius: { card: '2px', lg: '2px', xl: '3px', '2xl': '4px' },
+      // Soft, rounded shapes throughout; rounded-full for buttons, pills, dots and rings.
+      borderRadius: { card: '1.5rem' },
       boxShadow: {
-        soft: '0 1px 0 rgb(0 0 0 / 0.04)',
+        // Tinted with the violet ink so shadows feel warm rather than grey
+        soft: '0 1px 2px rgb(34 29 58 / 0.04), 0 8px 24px -14px rgb(34 29 58 / 0.14)',
+        lift: '0 10px 24px -12px rgb(91 76 219 / 0.55)',
       },
     },
   },

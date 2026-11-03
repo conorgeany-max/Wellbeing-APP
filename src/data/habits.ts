@@ -9,9 +9,8 @@ export interface HabitSeed {
   active?: boolean; // on the list from day one; the rest start archived, ready to restore
 }
 
-// Starter habits: general well-being plus ones linked to top strengths.
-// Bottom-strength habits are kept small and easy to finish.
-// Only three start active: a short list you can finish beats a long one you fall behind on.
+// Habits that earlier versions added on first launch. New installs start with
+// no habits; this list is only used to clear out unused copies of these.
 export const STARTER_HABITS: HabitSeed[] = [
   { id: 'h-exercise', name: 'Exercise', icon: '🏃', frequency: { type: 'weekly', times: 3 }, strength: 'zest', active: true },
   { id: 'h-sleep', name: '8h sleep', icon: '😴', frequency: { type: 'daily' }, strength: 'self-regulation' },

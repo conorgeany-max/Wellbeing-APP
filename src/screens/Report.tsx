@@ -97,7 +97,7 @@ export default function Report() {
         habits: habitRows.map((r) => `${r.habit.name}: ${Math.round(r.rate * 100)}%`),
         strengthsUsed: data.strengths.usage.filter((u) => u.count30 > 0).map((u) => `${u.strength.name}: ${u.count30} days`),
       };
-      const res = await api<{ summary: string[] }>('ask', { method: 'POST', body: JSON.stringify({ mode: 'report', entries: forClaude(entries, 31), stats }) });
+      const res = await api<{ summary: string[] }>('ask', { method: 'POST', body: JSON.stringify({ mode: 'report', entries: forClaude(entries, 31), stats, guide: settings.guide || undefined }) });
       setWritten(res.summary);
       try { localStorage.setItem(CACHE + month, JSON.stringify(res.summary)); } catch { /* storage unavailable */ }
     } catch (e) {
@@ -152,7 +152,7 @@ export default function Report() {
 
           <Card>
             <SectionTitle title="Mood through the month" />
-            <div className="grid grid-cols-7 gap-1.5 text-center text-[10px] text-muted">
+            <div className="grid grid-cols-7 gap-1.5 text-center text-[0.625rem] text-muted">
               {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((d, i) => <span key={i}>{d}</span>)}
               {Array.from({ length: (fromISO(days[0]).getDay() + 6) % 7 }, (_, i) => <span key={`pad-${i}`} />)}
               {days.map((d) => {
@@ -164,7 +164,7 @@ export default function Report() {
                     onClick={(ev) => !e && ev.preventDefault()}
                     title={e ? `${d}: mood ${e.mood}` : d}
                     className="flex aspect-square items-center justify-center rounded-lg text-xs"
-                    style={{ background: e ? moodColor(e.mood) : 'rgb(var(--line) / 0.5)', color: e ? '#111111' : undefined }}
+                    style={{ background: e ? moodColor(e.mood) : 'rgb(var(--line) / 0.5)', color: e ? '#221D3A' : undefined }}
                   >
                     {fromISO(d).getDate()}
                   </Link>
@@ -215,7 +215,7 @@ export default function Report() {
               ))}
             </div>
             {signatureUnused.length > 0 && (
-              <p className="mt-3 text-sm text-muted">Not logged this month: {signatureUnused.map((s) => s.name).join(', ')}. Maybe one for next month’s strength of the week.</p>
+              <p className="mt-3 text-sm text-muted">Not logged this month: {signatureUnused.map((s) => s.name).join(', ')}. They’ll come round in your daily prompt on Today.</p>
             )}
           </Card>
 
