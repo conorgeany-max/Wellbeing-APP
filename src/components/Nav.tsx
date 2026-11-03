@@ -24,13 +24,13 @@ export function TopNav() {
             key={i.to}
             to={i.to}
             end={i.end}
-            className={({ isActive }) => `eyebrow flex items-center px-2.5 py-3 text-[12px] transition ${isActive ? '!text-ink' : '!text-ink/70 hover:!text-ink'}`}
+            className={({ isActive }) => `eyebrow flex items-center px-2.5 py-3 text-[0.75rem] transition ${isActive ? '!text-ink' : '!text-ink/70 hover:!text-ink'}`}
           >
             {({ isActive }) => <span className={isActive ? 'squiggle' : ''}>{i.label}</span>}
           </NavLink>
         ))}
       </nav>
-      <NavLink to="/settings" className="eyebrow flex items-center gap-2 rounded-full bg-card px-4 py-3 text-[12px] !text-ink shadow-soft">
+      <NavLink to="/settings" className="eyebrow flex items-center gap-2 rounded-full bg-card px-4 py-3 text-[0.75rem] !text-ink shadow-soft">
         {({ isActive }) => (
           <>
             <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
@@ -55,7 +55,7 @@ export function BottomNav() {
           {({ isActive }) => (
             <>
               <span className="text-lg leading-none" aria-hidden>{i.icon}</span>
-              <span className={`eyebrow text-[10px] !text-current ${isActive ? 'squiggle' : ''}`}>{i.label}</span>
+              <span className={`eyebrow text-[0.625rem] !text-current ${isActive ? 'squiggle' : ''}`}>{i.label}</span>
             </>
           )}
         </NavLink>

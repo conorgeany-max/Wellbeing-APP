@@ -20,7 +20,7 @@ function ClaudeNotConnected() {
     <div className="space-y-2 py-3">
       <div className="flex items-center gap-2">
         <p className="text-sm font-medium">Claude</p>
-        <span className="rounded-full bg-line px-2 py-0.5 text-[11px] text-muted">Not connected yet</span>
+        <span className="rounded-full bg-line px-2 py-0.5 text-[0.6875rem] text-muted">Not connected yet</span>
       </div>
       <p className="text-xs text-muted">
         When connected, Claude answers “Ask my journal” in plain language and can write your monthly reflection. Until then, Ask my journal uses keyword search on this device.

@@ -152,7 +152,7 @@ export default function Report() {
 
           <Card>
             <SectionTitle title="Mood through the month" />
-            <div className="grid grid-cols-7 gap-1.5 text-center text-[10px] text-muted">
+            <div className="grid grid-cols-7 gap-1.5 text-center text-[0.625rem] text-muted">
               {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((d, i) => <span key={i}>{d}</span>)}
               {Array.from({ length: (fromISO(days[0]).getDay() + 6) % 7 }, (_, i) => <span key={`pad-${i}`} />)}
               {days.map((d) => {

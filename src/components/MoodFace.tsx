@@ -43,7 +43,7 @@ export function ScalePicker({ value, onChange, kind }: { value: number; onChange
               ))}
             </span>
           )}
-          <span className="text-[11px] text-muted">{labels[v]}</span>
+          <span className="text-[0.6875rem] text-muted">{labels[v]}</span>
         </button>
       ))}
     </div>

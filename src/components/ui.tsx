@@ -27,7 +27,7 @@ export function Page({ eyebrow, title, action, wide = false, children }: { eyebr
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      className={`mx-auto w-full max-w-2xl px-4 pb-28 pt-10 sm:px-6 md:pb-16 md:pt-8 ${wide ? 'lg:max-w-5xl' : ''}`}
+      className={`mx-auto w-full max-w-2xl px-4 pb-28 pt-10 sm:px-6 md:pb-16 md:pt-8 ${wide ? 'lg:max-w-6xl' : 'lg:max-w-3xl'}`}
     >
       <header className="mb-10 flex flex-col items-center gap-4 text-center">
         <p className="lead">{eyebrow}</p>

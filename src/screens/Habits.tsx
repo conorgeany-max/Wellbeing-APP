@@ -55,9 +55,9 @@ export default function Habits() {
               <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
                 <Heatmap done={done} />
                 <div className="flex gap-5 text-right">
-                  <div><p className="headline text-xl">{st.current}</p><p className="text-[11px] text-muted">current {st.unit}s</p></div>
-                  <div><p className="headline text-xl">{st.best}</p><p className="text-[11px] text-muted">best</p></div>
-                  <div><p className="headline text-xl">{Math.round(st.consistency * 100)}%</p><p className="text-[11px] text-muted">30 days</p></div>
+                  <div><p className="headline text-xl">{st.current}</p><p className="text-[0.6875rem] text-muted">current {st.unit}s</p></div>
+                  <div><p className="headline text-xl">{st.best}</p><p className="text-[0.6875rem] text-muted">best</p></div>
+                  <div><p className="headline text-xl">{Math.round(st.consistency * 100)}%</p><p className="text-[0.6875rem] text-muted">30 days</p></div>
                 </div>
               </div>
               <div className="-ml-2 mt-2 flex gap-1 text-sm">

@@ -51,13 +51,13 @@ export default function Today() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="mx-auto flex w-full max-w-xl flex-col gap-5 px-4 pb-28 pt-6 sm:px-6 md:pb-16 md:pt-10"
+        className="mx-auto flex w-full max-w-xl flex-col md:max-w-2xl lg:max-w-3xl gap-5 px-4 pb-28 pt-6 sm:px-6 md:pb-16 md:pt-10"
       >
         <Logo className="self-start md:hidden" />
 
         <header className="flex flex-col items-center gap-3 py-8 text-center md:py-12">
           <p className="text-sm text-muted">{formatLong(date)}</p>
-          <h1 className="headline text-5xl sm:text-6xl">{hello}</h1>
+          <h1 className="headline text-5xl sm:text-6xl lg:text-7xl">{hello}</h1>
           {away >= 2 && !entry && <p className="text-muted">Good to see you. Pick up wherever feels right.</p>}
           {!entry && <Link to="/checkin" className="btn-primary btn-arrow mt-4 py-3 pl-6 pr-2.5 text-base">Start check-in</Link>}
         </header>

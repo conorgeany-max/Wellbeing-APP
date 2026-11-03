@@ -36,6 +36,14 @@
 
 html, body, #root { min-height: 100%; }
 
+/* Everything is sized in rem, so the root size scales the whole app:
+   comfortable on phones, roomier on tablets, generous on laptops and big screens. */
+html { font-size: 17px; }
+@media (max-width: 359px) { html { font-size: 16px; } }
+@media (min-width: 768px) { html { font-size: 18px; } }
+@media (min-width: 1280px) { html { font-size: 19px; } }
+@media (min-width: 1680px) { html { font-size: 20px; } }
+
 body {
   @apply bg-bg text-ink font-sans antialiased;
   -webkit-tap-highlight-color: transparent;
@@ -43,7 +51,7 @@ body {
 
 @layer components {
   /* Small condensed caps, like the studio's nav labels */
-  .eyebrow { @apply font-sans text-[11px] font-bold uppercase tracking-[0.08em] text-muted; font-stretch: 75%; }
+  .eyebrow { @apply font-sans text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-muted; font-stretch: 75%; }
   /* Serif lead line that sits above a big headline */
   .lead { @apply font-serif text-xl leading-tight text-ink sm:text-2xl; }
   .headline { @apply font-serif font-normal leading-[0.95] text-ink; }
